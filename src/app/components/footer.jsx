@@ -49,7 +49,7 @@ export default async function Footer() {
     const footerData = await footerdata();
 
     return (
-        <footer className="bg-white py-8 px-4 md:px-0">
+        <footer className="bg-white py-8 px-4 md:px-0 md:pt-16 relative z-10">
             <div className="container mx-auto md:px-4">
                 <div className='flex flex-wrap flex-col md:flex-row justify-between items-center'>
                     <div className="flex flex-col md:flex-row gap-2 2xl:gap-4 items-center justify-between lg:justify-start w-full lg:w-auto border-b md:border-none border-theme-border pb-4 md:pb-0">

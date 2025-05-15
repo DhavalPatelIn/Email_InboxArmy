@@ -70,7 +70,7 @@
 
 @layer base {
   h1 {
-    @apply text-3xl md:text-4xl lg:text-5xl 2xl:text-55xl font-bold;
+    @apply text-3xl md:text-4xl lg:text-5xl 2xl:text-55xl font-bold md:tracking-tight;
   }
 
   .h2,
@@ -96,6 +96,11 @@
 
   .subtitle {
     @apply text-lg md:text-1xl font-bold;
+  }
+
+  .subtitle2 p,
+  .subtitle2 {
+    @apply text-base md:text-1xl;
   }
 
   a,
@@ -132,6 +137,12 @@ body {
   line-height: 1.2;
 }
 
+.subtitle2 p,
+p,
+li {
+  line-height: 1.45;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -151,6 +162,14 @@ img {
 
 :focus {
   outline: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  line-height: 1.4;
 }
 
 
@@ -209,6 +228,17 @@ textarea {
 
 select {
   border: 1px solid #ccc;
+  background-image: url(../images/select-arrow.svg);
+  background-position: center right 0;
+  background-repeat: no-repeat;
+  appearance: none;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
 }
 
 textarea {
@@ -221,6 +251,10 @@ textarea {
   padding-right: 16px;
   width: 100%;
   margin: 0 auto;
+}
+
+.small-container {
+  max-width: 1398px;
 }
 
 .main-navigation {
@@ -482,4 +516,8 @@ textarea {
     margin-top: 8px;
     width: 100%;
   }
+}
+
+.website-visit-btn:hover path {
+  fill: #fff;
 }
