@@ -522,3 +522,28 @@ textarea {
 .website-visit-btn:hover path {
   fill: #fff;
 }
+
+.email-service-section .content-text p {
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.email-service-section .content-text ul {
+  column-count: 2;
+  column-gap: 40px;
+  list-style-type: disc;
+  padding-left: 20px;
+  max-width: 690px;
+}
+
+.email-service-section .content-text ul li {
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+@media(max-width: 767px) {
+  .email-service-section .content-text ul {
+    column-count: 1;
+    max-width: 100%;
+  }
+}

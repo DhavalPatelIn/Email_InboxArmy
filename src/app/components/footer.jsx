@@ -7,13 +7,13 @@ import Newsletter from './newsletter';
 
 export async function footerdata() {
     const query = gql`
-    query FooterData {
-        themeoptions {
-            footer {
+        query FooterData {
+            themeoptions {
+                globaldata {
                 footerLink {
                     link {
-                    title
-                    url
+                        title
+                        url
                     }
                 }
                 socialMedia {
@@ -25,21 +25,21 @@ export async function footerdata() {
                     }
                     link
                 }
-                logo {
-                    node {
-                    altText
-                    sourceUrl
+                copyright
+                    footerLogo {
+                        node {
+                            sourceUrl
+                            altText
+                        }
                     }
                 }
-                copyright
             }
         }
-    }
   `;
 
     try {
         const { data } = await client.query({ query });
-        return data?.themeoptions?.footer ?? {};
+        return data?.themeoptions?.globaldata ?? {};
     } catch (error) {
         console.error('Error fetching footer data:', error);
         return {
@@ -61,14 +61,14 @@ export default async function Footer() {
                 <div className='flex flex-wrap flex-col md:flex-row justify-between items-center'>
                     <div className="flex flex-col md:flex-row gap-2 2xl:gap-4 items-center justify-between lg:justify-start w-full lg:w-auto border-b md:border-none border-theme-border pb-4 md:pb-0">
                         <Link href={"/"}>
-                            <Image src={footerData?.logo?.node?.sourceUrl} alt={footerData?.logo?.node?.altText} width={100} height={50} className="w-40" />
+                            <Image src={footerData?.footerLogo?.node?.sourceUrl} alt={footerData?.footerLogo?.node?.altText} width={100} height={50} className="w-40" />
                         </Link>
                         <nav className='md:ml-6 2xl:ml-12 pt-6 md:pt-0'>
                             <ul className='flex flex-wrap md:space-x-6 2xl:space-x-14 justify-center md:justify-start'>
                                 <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/categories">Categories</Link></li>
                                 <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/brands">Brands</Link></li>
-                                <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/about">About</Link></li>
-                                <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/contact">Contact Us</Link></li>
+                                <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/about-us">About</Link></li>
+                                <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/contact-us">Contact Us</Link></li>
                             </ul>
                         </nav>
                     </div>

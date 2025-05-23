@@ -45,7 +45,18 @@ export default async function Brands() {
                 </div>
             </div>
 
-            <MarketingAgency />
+            <MarketingAgency marketingAgency={{
+                title: '',
+                subText: '',
+                textArea: '',
+                servicesInformation: [],
+                logo: {
+                    node: {
+                        sourceUrl: ''
+                    }
+                },
+                ratingArea: []
+            }} />
         </>
     )
 }

@@ -52,7 +52,18 @@ export default async function Categories() {
         />
       </div>
 
-      <MarketingAgency />
+      <MarketingAgency marketingAgency={{
+        title: '',
+        subText: '',
+        textArea: '',
+        servicesInformation: [],
+        logo: {
+          node: {
+            sourceUrl: ''
+          }
+        },
+        ratingArea: []
+      }} />
     </>
   )
 }

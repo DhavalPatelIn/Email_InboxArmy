@@ -5,7 +5,7 @@ import Counter from './Counter';
 import EmailService from './EmailService';
 import Gallery from './Gallery';
 import VideoScottCohen from './VideoSection';
-import MarketingAgency from 'app/components/MarketingAgency';
+import MarketingAgency from '../components/MarketingAgency';
 import Brands from './brands';
 import Industries from './Industries';
 import HeroTitle from './HeroTitle';
@@ -37,6 +37,24 @@ export default function AboutUs() {
             <Testimonials />
 
             <MarketingAgency />
+
+
+
+            <MarketingAgency marketingAgency={{
+                title: '',
+                subText: '',
+                textArea: '',
+                servicesInformation: [],
+                logo: {
+                    node: {
+                        sourceUrl: ''
+                    }
+                },
+                ratingArea: []
+            }} />
+
+
+
 
         </>
     )
