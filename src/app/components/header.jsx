@@ -2,14 +2,10 @@ import Link from 'next/link';
 import HeaderSearch from './HeaderSearch';
 import { postdata } from '../lib/queries';
 
-
 // components/Header.tsx
 import HeaderClientWrapper from './HeaderClientWrapper';
-
 import DownArrow from '../images/down-arrow.svg'
-import MobileSearch from '../images/mobile-search-icon.svg'
 import Image from 'next/image';
-
 
 export default async function Header() {
     const { emailTypes, seasonals, industries } = await postdata();

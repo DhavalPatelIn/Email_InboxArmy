@@ -1,8 +1,3 @@
-// app/layout.tsx
-
-//'use client';
-
-
 import type { Metadata } from 'next';
 import './styles/globals.css';
 

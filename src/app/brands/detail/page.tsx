@@ -4,7 +4,6 @@ import MarketingAgency from 'app/components/MarketingAgency';
 
 import Willow from '../../images/willow.jpg'
 import Image from 'next/image';
-import EmailCard from 'app/components/EmailCard';
 
 export default async function Brands() {
     return (
@@ -41,16 +40,7 @@ export default async function Brands() {
             <div className='pb-10 md:pb-24'>
                 <div className='container'>
                     <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-y-4 gap-x-2 md:gap-5 2xl:gap-8 '>
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
+
                     </div>
                 </div>
             </div>

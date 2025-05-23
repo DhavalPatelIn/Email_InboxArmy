@@ -1,8 +1,8 @@
 module.exports = {
   content: [
-    './src/app/**/*.{js,ts,jsx,tsx}', // ✅ App directory
-    './src/pages/**/*.{js,ts,jsx,tsx}', // ✅ Optional if using pages too
-    './src/components/**/*.{js,ts,jsx,tsx}', // ✅ If you have components
+    './src/app/**/*.{js,ts,jsx,tsx}',
+    './src/pages/**/*.{js,ts,jsx,tsx}',
+    './src/components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {

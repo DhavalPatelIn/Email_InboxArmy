@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-//import client from './apollo-client';
 import { client } from './apollo-client';
 
 export const SEARCH_POSTS = gql`
@@ -9,6 +8,11 @@ export const SEARCH_POSTS = gql`
         id
         title
         slug
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
       }
     }
   }

@@ -18,6 +18,13 @@
     box-shadow: -15px 10px 0 var(--theme-dark);
 }
 
+.content-text p {
+    padding-bottom: 32px;
+}
+
+.content-text p:last-child {
+    padding-bottom: 0;
+}
 
 
 

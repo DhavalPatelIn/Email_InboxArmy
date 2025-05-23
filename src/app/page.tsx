@@ -1,28 +1,51 @@
+import { client } from './lib/apollo-client';
+import { gql } from '@apollo/client'
+import InfiniteScrollTemplates from './components/InfiniteScrollTemplates';
 
-import EmailCard from "./components/EmailCard";
 import HeroSection from "./components/HeroBanner";
-import InboxArmyAdsCard from "./components/InboxArmyAds";
+
+const EMAIL_TEMPLATES_QUERY = gql`
+  query EmailTemplate($after: String) {
+    templates(first: 6, after: $after) {
+      nodes {
+        title
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        emailTypes {
+          nodes {
+            name
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`;
 
 
-export default function Home() {
+export default async function Home() {
+  const { data } = await client.query({
+    query: EMAIL_TEMPLATES_QUERY,
+  });
+
+
   return (
     <>
       <HeroSection />
+
       <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-y-4 gap-x-2 md:gap-5 2xl:gap-8 pb-4 md:pb-12">
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-          <InboxArmyAdsCard />
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-          <EmailCard />
-        </div>
+        <InfiniteScrollTemplates
+          initialTemplates={data.templates.nodes}
+          hasNextPage={data.templates.pageInfo.hasNextPage}
+          endCursor={data.templates.pageInfo.endCursor}
+        />
+
       </div>
     </>
   );

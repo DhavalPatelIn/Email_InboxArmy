@@ -5,14 +5,16 @@ import Image from 'next/image';
 
 import EmailImage from '../images/email-1.jpg';
 
-// No need to define Props manually anymore
-
 interface Post {
     id: string;
     title: string;
     slug: string;
+    featuredImage: {
+        node: {
+            sourceUrl: string;
+        }
+    };
 }
-
 
 export default async function SearchPage({
     searchParams,
@@ -44,7 +46,7 @@ export default async function SearchPage({
                         <div key={post.id} className='w-full bg-white shadow-custom rounded-md md:rounded-xl border border-solid border-theme-border overflow-hidden'>
                             <Link href={`/posts/${post.slug}`} className="email-link">
                                 <div className="email-image relative py-36 sm:py-32 md:py-40 2xl:py-60 w-full overflow-hidden">
-                                    <Image className="absolute left-0 right-0 w-full" src={EmailImage} width={280} height={480} alt="Image" />
+                                    <Image className="absolute left-0 right-0 w-full" src={post.featuredImage?.node?.sourceUrl || EmailImage} width={280} height={480} alt="Image" />
                                 </div>
                                 <div className="p-2 md:p-4">
                                     <p className="text-theme-dark text-sm md:text-base  mb-2">{post.title}</p>

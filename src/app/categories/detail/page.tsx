@@ -7,7 +7,6 @@ import CvleLogo from '../../images/cvle-logo.webp'
 import Calander from '../../images/calander-icon.svg'
 import Image from 'next/image';
 import Link from 'next/link';
-import EmailCard from 'app/components/EmailCard';
 
 
 
@@ -151,11 +150,7 @@ export default async function CategoriesDetail() {
                     </div>
 
                     <div className="related-category grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-y-4 gap-x-2 md:gap-5 2xl:gap-8 pt-8 md:pt-12">
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
-                        <EmailCard />
+
                     </div>
                     <div className='text-center mt-12'>
                         <Link href={"/"} className='block md:inline-block bg-theme-blue text-white hover:bg-theme-dark hover:text-white font-bold px-1 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap border-none text-sm md:text-base'>
