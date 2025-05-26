@@ -62,7 +62,12 @@ export default async function Categories() {
             sourceUrl: ''
           }
         },
-        ratingArea: []
+        ratingArea: [],
+        link: {
+          url: '',
+          title: '',
+          target: ''
+        }
       }} />
     </>
   )

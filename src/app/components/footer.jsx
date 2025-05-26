@@ -60,9 +60,9 @@ export default async function Footer() {
             <div className="container mx-auto md:px-4">
                 <div className='flex flex-wrap flex-col md:flex-row justify-between items-center'>
                     <div className="flex flex-col md:flex-row gap-2 2xl:gap-4 items-center justify-between lg:justify-start w-full lg:w-auto border-b md:border-none border-theme-border pb-4 md:pb-0">
-                        <Link href={"/"}>
-                            <Image src={footerData?.footerLogo?.node?.sourceUrl} alt={footerData?.footerLogo?.node?.altText} width={100} height={50} className="w-40" />
-                        </Link>
+
+                        <Image src={footerData?.footerLogo?.node?.sourceUrl} alt={footerData?.footerLogo?.node?.altText} width={100} height={50} className="w-40" />
+
                         <nav className='md:ml-6 2xl:ml-12 pt-6 md:pt-0'>
                             <ul className='flex flex-wrap md:space-x-6 2xl:space-x-14 justify-center md:justify-start'>
                                 <li className='px-3 py-2 md:p-0'><Link className='font-semibold md:font-medium hover:text-theme-blue' href="/categories">Categories</Link></li>

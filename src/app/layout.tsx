@@ -5,6 +5,7 @@ import './styles/globals.css';
 import Header from './components/header';
 import Footer from './components/footer';
 import GlobalLoader from './components/GlobalLoader';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: "A Full-Service Email Marketing Agency - InboxArmy",
@@ -24,7 +25,12 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
-
+        {/* BugHerd Script */}
+        <Script
+          src="https://www.bugherd.com/sidebarv2.js?apikey=vfmlojxzuzzx1k3puoexfq "
+          strategy="afterInteractive"
+          async
+        />
       </body>
     </html>
   );

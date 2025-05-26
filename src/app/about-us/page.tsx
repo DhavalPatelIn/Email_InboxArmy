@@ -2,17 +2,19 @@ import Testimonials from 'app/components/Testimonials';
 import './about.css';
 import Awarded from './Awarded';
 import Counter from './Counter';
-import EmailService from './EmailService';
+import { fetchEmailServicesData } from './about-queries';
 import Gallery from './Gallery';
 import VideoScottCohen from './VideoSection';
 import MarketingAgency from '../components/MarketingAgency';
 import Brands from './brands';
 import Industries from './Industries';
 import HeroTitle from './HeroTitle';
+import { getCounterData } from './server/counter-data';
+import EmailService from './EmailService';
 
-
-
-export default function AboutUs() {
+export default async function AboutUs() {
+    const { counterData } = await getCounterData();
+    const emailServices = await fetchEmailServicesData();
 
     return (
         <>
@@ -24,21 +26,17 @@ export default function AboutUs() {
 
             <Gallery />
 
-            <Counter />
+            <Counter counterData={counterData} />
 
             <Awarded />
 
-            <EmailService />
+            <EmailService emailServices={emailServices} />
 
             <Brands />
 
             <Industries />
 
             <Testimonials />
-
-            <MarketingAgency />
-
-
 
             <MarketingAgency marketingAgency={{
                 title: '',
@@ -50,12 +48,13 @@ export default function AboutUs() {
                         sourceUrl: ''
                     }
                 },
-                ratingArea: []
+                ratingArea: [],
+                link: {
+                    url: '',
+                    title: '',
+                    target: ''
+                }
             }} />
-
-
-
-
         </>
     )
 }

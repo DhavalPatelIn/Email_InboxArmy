@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link';
 import InboxArmyLogo from '../images/inboxarmy-whitelogo.svg';
 import EmailBanner from '../images/email-banner.webp';
 import Clutch from '../images/clutch.svg';
@@ -34,6 +34,11 @@ interface Post {
             };
         };
     }[];
+    link: {
+        url: string;
+        title: string;
+        target: string;
+    };
 }
 
 interface MarketingAgencyProps {
@@ -89,6 +94,7 @@ export default async function MarketingAgency({ marketingAgency }: MarketingAgen
         const agencyData = data?.themeoptions?.globaldata || marketingAgency;
 
         if (!agencyData) {
+            console.log('No agency data found');
             return <div>Loading...</div>;
         }
 
@@ -106,9 +112,9 @@ export default async function MarketingAgency({ marketingAgency }: MarketingAgen
                                         <h2 className="mb-6">{agencyData.title}</h2>
                                         <p className="mb-6 text-white text-lg md:text-1xl">{agencyData.subText}</p>
                                         <div className="content-text" dangerouslySetInnerHTML={{ __html: agencyData.textArea }}></div>
-                                        <Link href={agencyData.link?.url || 'https://www.inboxarmy.com/'} target={agencyData.link?.target || '_blank'} className='hidden md:inline-block bg-theme-blue text-white hover:bg-white hover:text-theme-dark font-intersemi font-semibold px-1 md:px-5 py-3 md:py-4 mt-8 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base'>
+                                        <a href={agencyData.link?.url} target={agencyData.link?.target || '_blank'} className='hidden md:inline-block bg-theme-blue text-white hover:bg-white hover:text-theme-dark font-intersemi font-semibold px-1 md:px-5 py-3 md:py-4 mt-8 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base'>
                                             {agencyData.link?.title || 'Visit InboxArmy.com'}
-                                        </Link>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -129,7 +135,7 @@ export default async function MarketingAgency({ marketingAgency }: MarketingAgen
                                                     };
                                                 };
                                             }, index: number) => (
-                                                <div key={index} className="bg-[#3c451b] rounded-2xl px-4 md:px-8 py-4 flex items-center justify-between bg-white bg-opacity-10">
+                                                <div key={index} className="rounded-2xl px-4 md:px-8 py-4 flex items-center justify-between bg-white bg-opacity-10">
                                                     <div className="text-white text-2xl font-bold max-w-10 md:max-w-[102px]">
                                                         <Image
                                                             className='w-full'
@@ -157,17 +163,16 @@ export default async function MarketingAgency({ marketingAgency }: MarketingAgen
 
                                         <div className='agency-box flex flex-wrap md:space-y-4 md:block'>
                                             {agencyData.servicesInformation?.slice(0, 3).map((service: { informationText: string }, index: number) => (
-                                                <div key={index} className="info-text bg-[#3c451b] rounded-2xl px-4 md:px-8 py-4 flex items-center bg-white bg-opacity-10 min-h-80 md:min-h-[102px]">
+                                                <div key={index} className="info-text rounded-2xl px-4 md:px-8 py-4 flex items-center bg-white bg-opacity-10 min-h-80 md:min-h-[102px]">
                                                     <div className='text-base md:text-1xl leading-6 md:leading-8 block 2xl:pr-10' dangerouslySetInnerHTML={{ __html: service.informationText }}></div>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
                                 </div>
-
-                                <Link href={'https://www.inboxarmy.com/'} target='_blank' className='block md:hidden bg-theme-blue text-white hover:bg-white hover:text-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base text-center'>
-                                    Visit InboxArmy.com
-                                </Link>
+                                <a href={agencyData.link?.url} target={agencyData.link?.target} className='block md:hidden bg-theme-blue text-white hover:bg-white hover:text-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base text-center'>
+                                    {agencyData.link?.title}
+                                </a>
                             </div>
                         </div>
                     </div>

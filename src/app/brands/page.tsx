@@ -116,7 +116,12 @@ export default async function Brands() {
                         sourceUrl: ''
                     }
                 },
-                ratingArea: []
+                ratingArea: [],
+                link: {
+                    url: '',
+                    title: '',
+                    target: ''
+                }
             }} />
         </>
     )
