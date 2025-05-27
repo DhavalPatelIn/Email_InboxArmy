@@ -33,7 +33,7 @@ export default function Counter({ counterData }: CounterProps) {
 
     return (
         <>
-            <section ref={sectionRef} className='relative z-10 my-12 md:my-16 lg:my-20'>
+            <section ref={sectionRef} className='relative z-10 my-10 md:my-16 lg:my-20'>
                 <div className='container small-container text-center md:text-left'>
                     <div className="counter-row flex flex-col md:flex-row justify-center md:justify-between items-start gap-6 md:gap-4 lg::gap-2">
                         {counterData.map((counter, index) => (

@@ -186,6 +186,10 @@
     .email-service-title h2 br {
         display: none;
     }
+
+    .industry-title br {
+        display: none;
+    }
 }
 
 @media(max-width: 767px) {
@@ -205,7 +209,7 @@
 
     .logowrap img {
         max-width: 100%;
-        max-height: 100%;
+        max-height: 100% !important;
     }
 
     .emailservice .slick-slider {
@@ -225,6 +229,8 @@
         max-width: 80px;
         max-height: 100px;
     }
+
+
 
 
 }

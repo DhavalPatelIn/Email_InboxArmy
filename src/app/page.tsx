@@ -2,6 +2,7 @@ import { client } from './lib/apollo-client';
 import { gql } from '@apollo/client'
 import InfiniteScrollTemplates from './components/InfiniteScrollTemplates';
 
+
 import HeroSection from "./components/HeroBanner";
 
 const EMAIL_TEMPLATES_QUERY = gql`

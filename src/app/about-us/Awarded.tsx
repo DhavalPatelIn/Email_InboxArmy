@@ -28,7 +28,7 @@ export default async function Awarded() {
     const { awardImage, awardHeading } = awardNode?.aboutUs ?? { awardImage: [], awardHeading: '' };
 
     return (
-        <section className='relative z-10 my-12 md:my-16 lg:my-20'>
+        <section className='relative z-10 my-10 md:my-16 lg:my-20'>
             <div className='container small-container text-center'>
                 <h2 className='mb-11'>{awardHeading}</h2>
                 <div className="award-images flex flex-wrap justify-center items-center gap-8">

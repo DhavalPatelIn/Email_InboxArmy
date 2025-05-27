@@ -108,7 +108,6 @@ query Counter {
 `;
 // server/email-services-fetcher.tsx
 
-
 const EMAILSERVICES_QUERY = gql`
   query EmailServices {
     pages {
@@ -154,3 +153,58 @@ export const fetchEmailServicesData = async () => {
     };
   }
 };
+
+export const BRANDS_QUERY = gql`
+    query BrandsData {
+        pages {
+            nodes {
+            aboutUs {
+                brandsHeading
+                brandsContent
+                brandsImages {
+                image {
+                    node {
+                    sourceUrl
+                    altText
+                    }
+                }
+                }
+            }
+            }
+        }
+    }
+`;
+
+
+
+export const INDUSTRIES_QUERY = gql`
+  query industries {
+    pages {
+      nodes {
+        aboutUs {
+          industriesTitle
+          industriesContent
+          industriesData {
+            image {
+              node {
+                altText
+                sourceUrl
+              }
+            }
+            title
+          }
+          industriesLink {
+            title
+            url
+            target
+          }
+        }
+      }
+    }
+  }
+`;
+
+
+
+
+

@@ -11,10 +11,12 @@ import Industries from './Industries';
 import HeroTitle from './HeroTitle';
 import { getCounterData } from './server/counter-data';
 import EmailService from './EmailService';
+import { getTestimonialsData } from './server/testimonials-data';
 
 export default async function AboutUs() {
     const { counterData } = await getCounterData();
     const emailServices = await fetchEmailServicesData();
+    const testimonials = await getTestimonialsData();
 
     return (
         <>
@@ -36,7 +38,7 @@ export default async function AboutUs() {
 
             <Industries />
 
-            <Testimonials />
+            <Testimonials testimonials={testimonials.testimonials} testimonialHeading={testimonials.testimonialHeading} />
 
             <MarketingAgency marketingAgency={{
                 title: '',

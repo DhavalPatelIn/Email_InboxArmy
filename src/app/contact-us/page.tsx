@@ -1,6 +1,8 @@
 import Testimonials from "app/components/Testimonials";
 import Image from "next/image";
 
+import { getTestimonialsData } from '../about-us/server/testimonials-data';
+
 import './contact-style.css';
 
 import MapMaker from '../images/map-icon.png'
@@ -11,8 +13,8 @@ import Linkedin from '../images/linkedin.svg'
 import Be from '../images/be.svg'
 import Twitter from '../images/twitter.svg'
 
-export default function ContactUs() {
-
+export default async function ContactUs() {
+    const testimonials = await getTestimonialsData();
 
     return (
         <>
@@ -151,7 +153,7 @@ export default function ContactUs() {
                 </div>
             </div>
 
-            <Testimonials />
+            <Testimonials testimonials={testimonials.testimonials} testimonialHeading={testimonials.testimonialHeading} />
 
         </>
     );

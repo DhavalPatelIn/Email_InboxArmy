@@ -1,23 +1,44 @@
 import { gql } from '@apollo/client';
 import { client } from './apollo-client';
 
-export const SEARCH_POSTS = gql`
-  query SearchPosts($search: String!) {
-    posts(where: { search: $search }) {
+// export const SEARCH_POSTS = gql`
+// query SearchPosts($search: String!) {
+//   posts(where: { search: $search }) {
+//     nodes {
+//       id
+//       title
+//       slug
+//       featuredImage {
+//         node {
+//           sourceUrl
+//         }
+//       }
+//     }
+//   }
+// }
+export const SEARCH_POSTS = gql`  
+  query SearchQuery($search: String!) {
+    templates(where: { search: $search }) {
       nodes {
-        id
         title
-        slug
         featuredImage {
           node {
             sourceUrl
+          }
+        }
+        contentType {
+          node {
+            connectedTaxonomies {
+              nodes {
+                name
+              }
+            }
           }
         }
       }
     }
   }
 `;
-
 
 
 
@@ -76,3 +97,4 @@ export async function postdata() {
     industries: data?.industries?.nodes ?? [],
   };
 }
+

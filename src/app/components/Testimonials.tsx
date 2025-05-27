@@ -1,17 +1,30 @@
 'use client';
 
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import '../styles/testimonial.css'
+import React from 'react';
+import Slider from 'react-slick';
+import Image from 'next/image';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import '../styles/testimonial.css';
 
-import Purple_Desktop from '../images/Purple_Desktop.webp'
-import Purple_Tab from '../images/Purple_Tab.webp'
-import Purple_Mobile from '../images/Purple_Mobile.webp'
-import Image from "next/image";
 
-export default function Testimonials() {
+interface TestimonialItem {
+    testimonialHeading?: string;
+    desktopImage: { node: { sourceUrl: string } };
+    tabletImage: { node: { sourceUrl: string } };
+    mobileImage: { node: { sourceUrl: string } };
+}
+
+interface TestimonialsProps {
+    testimonials: TestimonialItem[];
+    testimonialHeading: string;
+}
+
+export default function Testimonials({ testimonials = [], testimonialHeading = '' }: TestimonialsProps) {
+    if (!testimonials.length) {
+        return <div className="text-center mt-10">Loading testimonials..</div>;
+    }
+
     const settings = {
         dots: false,
         infinite: true,
@@ -20,42 +33,37 @@ export default function Testimonials() {
         slidesToScroll: 1,
         arrows: true,
     };
-    return (
-        <>
-            {/* Testimonial Slider Section */}
-            <section className="py-10 md:py-16 bg-transparent testimonial-slider">
-                <h2 className="text-center mb-10">What Clients Say</h2>
-                <div className="slider-wrapper mx-auto">
-                    <Slider {...settings}>
-                        {/* Slide 1 */}
-                        <div className="item">
-                            <picture className="block m-auto">
-                                <source className="block m-auto" srcSet={Purple_Desktop.src} media="(min-width: 1025px)" />
-                                <source className="block m-auto" srcSet={Purple_Tab.src} media="(min-width: 768px)" />
-                                <Image className="block m-auto" src={Purple_Mobile} alt="Description" width={320} height={1000} />
-                            </picture>
-                        </div>
-                        {/* Slide 2 */}
-                        <div className="item">
-                            <picture className="block m-auto">
-                                <source className="block m-auto" srcSet={Purple_Desktop.src} media="(min-width: 1025px)" />
-                                <source className="block m-auto" srcSet={Purple_Tab.src} media="(min-width: 768px)" />
-                                <Image className="block m-auto" src={Purple_Mobile} alt="Description" width={320} height={1000} />
-                            </picture>
-                        </div>
-                        {/* Slide 3 */}
-                        <div className="item">
-                            <picture className="block m-auto">
-                                <source className="block m-auto" srcSet={Purple_Desktop.src} media="(min-width: 1025px)" />
-                                <source className="block m-auto" srcSet={Purple_Tab.src} media="(min-width: 768px)" />
-                                <Image className="block m-auto" src={Purple_Mobile} alt="Description" width={320} height={1000} />
-                            </picture>
-                        </div>
 
-                        {/* Add more slides here if needed */}
-                    </Slider>
-                </div>
-            </section>
-        </>
+    return (
+        <section className="py-10 md:py-24 bg-transparent testimonial-slider">
+
+            <h2 className="text-center mb-12">{testimonialHeading}</h2>
+
+            <div className="slider-wrapper mx-auto">
+                <Slider {...settings}>
+                    {(testimonials || []).map((item, index) => (
+                        <div className="item" key={index}>
+                            <picture className="block m-auto">
+                                <source className="block m-auto"
+                                    srcSet={item.desktopImage?.node?.sourceUrl}
+                                    media="(min-width: 1025px)"
+                                />
+                                <source className="block m-auto"
+                                    srcSet={item.tabletImage?.node?.sourceUrl}
+                                    media="(min-width: 768px)"
+                                />
+                                <Image className="block m-auto"
+                                    src={item.mobileImage?.node?.sourceUrl || ''}
+                                    alt={`Testimonial ${index + 1}`}
+                                    width={320}
+                                    height={1294}
+                                />
+                            </picture>
+
+                        </div>
+                    ))}
+                </Slider>
+            </div>
+        </section>
     );
 }

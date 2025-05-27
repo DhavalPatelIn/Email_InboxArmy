@@ -165,6 +165,23 @@ img {
   outline: none;
 }
 
+.content-text ul li {
+  list-style-type: disc;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+
+.content-text ol li {
+  list-style-type: decimal;
+  margin-bottom: 10px;
+  margin-left: 20px;
+}
+
+blockquote {
+  border-left: 4px solid var(--theme-blue);
+  padding-left: 16px;
+}
+
 h1,
 h2,
 h3,
@@ -525,7 +542,12 @@ textarea {
 
 .email-service-section .content-text p {
   color: #fff;
-  margin-bottom: 24px;
+  padding-bottom: 24px;
+}
+
+.info-text p {
+  color: #ffffff;
+  font-size: 22px;
 }
 
 .email-service-section .content-text ul {
@@ -545,5 +567,10 @@ textarea {
   .email-service-section .content-text ul {
     column-count: 1;
     max-width: 100%;
+    padding-left: 10px;
+  }
+
+  .info-text p {
+    font-size: 18px;
   }
 }

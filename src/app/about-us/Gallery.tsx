@@ -30,9 +30,9 @@ export default async function Gallery() {
 
     return (
         <>
-            <section className='relative z-10 my-12 md:my-16 lg:my-20'>
+            <section className='relative z-10 my-10 md:my-16 lg:my-20'>
                 <div className='container small-container text-center space-y-6 md:space-y-12'>
-                    <h2>{galleryHeading || 'Meet Our Email Marketing Heroes'}</h2>
+                    <h2>{galleryHeading}</h2>
 
                     <div className='gallery-wrapper grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 lg:gap-10'>
                         {galleryImages?.map((item: GalleryImage, index: number) => (

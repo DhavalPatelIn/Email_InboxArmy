@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick-theme.css";
 import '../styles/testimonial.css';
 import Image from 'next/image';
 
-
 interface EmailServiceProps {
     emailServices: {
         emailHeading: string;
@@ -38,7 +37,7 @@ export default function EmailService({ emailServices }: EmailServiceProps) {
 
 
     return (
-        <section className="relative z-10 py-12 md:py-16 lg:py-20 bg-theme-light-gray">
+        <section className="relative z-10 py-10 md:py-16 lg:py-20 bg-theme-light-gray">
             <div className="container small-container flex flex-wrap items-center">
                 {/* Left: Text Content */}
                 <div className="email-service-title w-full lg:w-5/12 text-center lg:text-left pb-8 md:pb-10 lg:pb-0 lg:pr-2">

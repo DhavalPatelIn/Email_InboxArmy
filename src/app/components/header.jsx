@@ -57,50 +57,50 @@ export default async function Header() {
                                             <span className='down-arrow absolute top-2 left-32 right-0 m-auto w-8 h-10 flex items-center justify-center xl:hidden'>
                                                 <Image src={DownArrow} width={30} header={30} alt="Icon" />
                                             </span>
-                                            <div className="child-menu xl:absolute top-full xl:left-0 xl:right-0 hidden xl:group-hover:grid grid-cols-3 gap-x-20 px-4 md:px-10 py-4 xl:py-12 bg-white">
-                                                <ul className="grid grid-cols-2 xl:border-r border-theme-border border-solid pb-4 xl:pb-0">
+                                            <div className="child-menu xl:absolute top-full xl:left-0 xl:right-0 hidden xl:group-hover:grid grid-cols-3 xl:gap-x-4 2xl:gap-x-20 px-4 md:px-10 py-4 xl:pt-0 xl:py-6 2xl:py-12 bg-white">
+                                                <ul className="flex flex-wrap xl:border-r border-theme-border border-solid pb-4 xl:pb-0">
                                                     <input type="checkbox" id="main" className="category-child top-0 left-28 right-0 m-auto w-8 h-9 z-30 cursor-pointer block xl:hidden opacity-0" defaultChecked />
-                                                    <li className="col-span-2 py-3 xl:mb-4 px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Email Type
+                                                    <li className="w-full py-3 2xl:mb-4 px-3 md:px-5 xl:px-2 2xl:px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Email Type
                                                         <span className='submenu-arrow absolute top-0 right-4 w-8 h-full flex items-center justify-center xl:hidden'>
                                                             <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
                                                         </span>
                                                     </li>
                                                     {emailTypes.map((item) => (
-                                                        <li key={item.slug} className="child-2 inline-block text-left">
-                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/email-type/${item.slug}`}>
+                                                        <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
+                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/email-type/${item.slug}`}>
                                                                 {item.name}
                                                             </Link>
                                                         </li>
                                                     ))}
                                                 </ul>
 
-                                                <ul className="grid grid-cols-2 xl:border-r border-theme-border border-solid pb-4 xl:pb-0">
+                                                <ul className="flex flex-wrap xl:border-r border-theme-border border-solid pb-4 xl:pb-0">
                                                     <input type="checkbox" id="option1" className="category-child top-0 left-28 right-0 m-auto w-8 h-9 z-30 cursor-pointer block xl:hidden opacity-0" />
-                                                    <li className="col-span-2 py-3 xl:mb-4 px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Industry
+                                                    <li className="w-full py-3 2xl:mb-4 px-3 md:px-5 xl:px-2 2xl:px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Industry
                                                         <span className='submenu-arrow absolute top-0 right-4 w-8 h-full flex items-center justify-center xl:hidden'>
                                                             <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
                                                         </span>
                                                     </li>
                                                     {industries.map((item) => (
-                                                        <li key={item.slug} className="child-2 inline-block text-left">
-                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/industry/${item.slug}`}>
+                                                        <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
+                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/industry/${item.slug}`}>
                                                                 {item.name}
                                                             </Link>
                                                         </li>
                                                     ))}
                                                 </ul>
 
-                                                <ul className="grid grid-cols-2 items-start justify-start">
+                                                <ul className="flex flex-wrap items-start justify-start">
                                                     <input type="checkbox" id="option2" className="category-child top-0 left-28 right-0 m-auto w-8 h-9 z-30 cursor-pointer block xl:hidden opacity-0" />
-                                                    <li className="col-span-2 py-3 xl:mb-4 px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Seasonal
+                                                    <li className="w-full py-3 2xl:mb-4 px-3 md:px-5 xl:px-2 2xl:px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Seasonal
                                                         <span className='submenu-arrow absolute top-0 right-4 w-8 h-full flex items-center justify-center xl:hidden'>
                                                             <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
                                                         </span>
                                                     </li>
 
                                                     {seasonals.map((item) => (
-                                                        <li key={item.slug} className="child-2 inline-block text-left">
-                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/seasonal/${item.slug}`}>
+                                                        <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
+                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/seasonal/${item.slug}`}>
                                                                 {item.name}
                                                             </Link>
                                                         </li>

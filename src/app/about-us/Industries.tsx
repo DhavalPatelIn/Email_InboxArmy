@@ -1,65 +1,84 @@
 import Image from 'next/image';
+import { client } from 'app/lib/apollo-client';
+import { INDUSTRIES_QUERY } from './about-queries';
 
-import Banking from '../images/banking.svg'
 
-export default function Industries() {
+interface IndustriesImage {
+    title: string;
+    url: string;
+    target: string;
+    image: {
+        node: {
+            sourceUrl: string;
+            altText: string;
+        }
+    }
+    industriesLink: {
+        title: string;
+        url: string;
+        target: string;
+    }
+}
+
+
+interface IndustriesNode {
+    aboutUs?: {
+        industriesTitle?: string;
+        industriesContent?: string;
+        industriesData?: IndustriesImage[];
+        image: {
+            node: {
+                sourceUrl: string;
+                altText: string;
+            }
+        }
+        industriesLink: {
+            title: string;
+            url: string;
+            target: string;
+        }
+    }
+}
+
+async function getIndustriesData() {
+    const { data } = await client.query({ query: INDUSTRIES_QUERY });
+    const industriesNode = data?.pages?.nodes?.find((node: IndustriesNode) => node?.aboutUs);
+    return industriesNode?.aboutUs ?? {};
+}
+
+
+
+export default async function Industries() {
+    const indData = await getIndustriesData();
+    const { industriesTitle, industriesContent, industriesData, industriesLink } = indData;
+
     return (
-        <section className="relative z-10 py-12 md:py-16 lg:py-24 bg-theme-light-gray">
-            <div className="container small-container items-center">
+        <>
+            <section className="relative z-10 py-10 md:py-16 lg:py-24 bg-theme-light-gray">
+                <div className="container small-container items-center">
 
-                <div className="flex flex-col items-center text-center mb-12">
-                    <h2 className="mb-4">InboxArmy Serves 25+ Industries and Verticals</h2>
-                    <p className='text-base md:text-lg'>InboxArmy is proud to have served more than 5,000 businesses across 25+ industries and verticals.<br />We provide industry-specific email marketing solutions to a diverse range of businesses, from startups to Blue Chip companies.</p>
-                </div>
-                <div className="industry-card-wrapper flex flex-wrap xl:flex-nowrap items-start justify-center  gap-6 justify-items-center pb-10">
+                    <div className="flex flex-col items-center text-center mb-12 industry-title">
+                        <h2 className="mb-4" dangerouslySetInnerHTML={{ __html: industriesTitle }} />
+                        <p className='text-base md:text-lg' dangerouslySetInnerHTML={{ __html: industriesContent }} />
+                    </div>
+                    <div className="industry-card-wrapper flex flex-wrap xl:flex-nowrap items-start justify-center  gap-6 justify-items-center pb-10">
 
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Banking</span>
+                        {industriesData?.map((item: IndustriesImage, index: number) => (
+                            <div key={index} className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
+                                <div className='image-row m-0 w-12 md:w-auto'>
+                                    <Image src={item.image.node.sourceUrl} height={61} width={55} alt={item.image.node.altText} />
+                                </div>
+                                <span className="text-base block text-center mt-4" dangerouslySetInnerHTML={{ __html: item.title }} />
+                            </div>
+                        ))}
                     </div>
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Ecommerce</span>
-                    </div>
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Insurance</span>
-                    </div>
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Financial Services</span>
-                    </div>
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Healthcare</span>
-                    </div>
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Video Gaming</span>
-                    </div>
-                    <div className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
-                        <div className='image-row m-auto w-12 md:w-auto h-12 md:h-auto'>
-                            <Image src={Banking} height={61} width={55} alt='Icon' />
-                        </div>
-                        <span className="text-base block text-center mt-4">Digital Agency</span>
+
+                    <div className="md:flex justify-center">
+                        <a href={industriesLink.url} target={industriesLink.target} className="text-center block bg-theme-blue text-white  hover:bg-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base">{industriesLink.title}</a>
                     </div>
                 </div>
-                <div className="md:flex justify-center">
-                    <a href='#' className="text-center block bg-theme-blue text-white  hover:bg-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base">Explore more</a>
-                </div>
-            </div>
-        </section>
+
+            </section>
+        </>
     );
 }
