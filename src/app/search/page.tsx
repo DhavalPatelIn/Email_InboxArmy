@@ -49,10 +49,10 @@ export default async function SearchPage(props: PageProps) {
             variables: { search: keyword },
         });
 
-        if (!data?.templates?.nodes) {
+        if (!data?.templates?.nodes || data.templates.nodes.length === 0) {
             return (
-                <div className="p-6">
-                    <h1 className="text-2xl font-bold mb-4">No results found.</h1>
+                <div className="px-6 py-40 text-center w-full">
+                    <div className="h2">No results found.</div>
                 </div>
             );
         }

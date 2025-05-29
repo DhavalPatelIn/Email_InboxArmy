@@ -9,6 +9,7 @@ query AboutPage {
       heroContent
       videoHeading
       videoContent
+      videoUrl
       videoImage {
         node {
           sourceUrl

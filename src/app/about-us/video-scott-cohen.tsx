@@ -22,6 +22,7 @@ interface VideoScottCohenProps {
 export default function VideoScottCohen({ aboutpages }: VideoScottCohenProps) {
     const [showModal, setShowModal] = useState(false);
 
+
     // Check if all content is empty
     if (!aboutpages ||
         (!aboutpages.videoHeading &&
@@ -86,7 +87,7 @@ export default function VideoScottCohen({ aboutpages }: VideoScottCohenProps) {
                             &times;
                         </button>
                         <iframe
-                            src={`https://player.vimeo.com/video/${aboutpages.videoUrl}?autoplay=1`}
+                            src={`https://player.vimeo.com/video/${aboutpages.videoUrl.replace(/[^0-9]/g, '')}?autoplay=1`}
                             allow="autoplay; fullscreen; picture-in-picture"
                             allowFullScreen
                             title="Scott Cohen Introduction"

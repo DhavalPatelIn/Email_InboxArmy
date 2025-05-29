@@ -337,6 +337,7 @@ textarea {
   display: block;
 }
 
+
 /* Search */
 .search-row input {
   padding-right: 50px;
@@ -452,6 +453,10 @@ textarea {
 
   .child-menu {
     display: none;
+  }
+
+  .category-child:checked~.SubMenu {
+    margin-bottom: 10px;
   }
 
   .category-menu:checked~.child-menu {

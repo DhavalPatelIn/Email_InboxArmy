@@ -14,6 +14,7 @@ export default function HeaderSearch() {
         e.preventDefault();
         if (!keyword.trim()) return;
         router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
+        setKeyword('');
     };
 
     return (
