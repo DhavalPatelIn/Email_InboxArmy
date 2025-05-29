@@ -35,35 +35,37 @@ export default function Testimonials({ testimonials = [], testimonialHeading = '
     };
 
     return (
-        <section className="py-10 md:py-24 bg-transparent testimonial-slider">
+        <>
+            <section className="my-10 md:my-24 bg-transparent testimonial-slider">
 
-            <h2 className="text-center mb-12">{testimonialHeading}</h2>
+                <h2 className="text-center mb-12">{testimonialHeading}</h2>
 
-            <div className="slider-wrapper mx-auto">
-                <Slider {...settings}>
-                    {(testimonials || []).map((item, index) => (
-                        <div className="item" key={index}>
-                            <picture className="block m-auto">
-                                <source className="block m-auto"
-                                    srcSet={item.desktopImage?.node?.sourceUrl}
-                                    media="(min-width: 1025px)"
-                                />
-                                <source className="block m-auto"
-                                    srcSet={item.tabletImage?.node?.sourceUrl}
-                                    media="(min-width: 768px)"
-                                />
-                                <Image className="block m-auto"
-                                    src={item.mobileImage?.node?.sourceUrl || ''}
-                                    alt={`Testimonial ${index + 1}`}
-                                    width={320}
-                                    height={1294}
-                                />
-                            </picture>
+                <div className="slider-wrapper mx-auto">
+                    <Slider {...settings}>
+                        {(testimonials || []).map((item, index) => (
+                            <div className="item" key={index}>
+                                <picture className="block m-auto">
+                                    <source className="block m-auto"
+                                        srcSet={item.desktopImage?.node?.sourceUrl}
+                                        media="(min-width: 1025px)"
+                                    />
+                                    <source className="block m-auto"
+                                        srcSet={item.tabletImage?.node?.sourceUrl}
+                                        media="(min-width: 768px)"
+                                    />
+                                    <Image className="block m-auto"
+                                        src={item.mobileImage?.node?.sourceUrl || ''}
+                                        alt={`Testimonial ${index + 1}`}
+                                        width={320}
+                                        height={1294}
+                                    />
+                                </picture>
 
-                        </div>
-                    ))}
-                </Slider>
-            </div>
-        </section>
+                            </div>
+                        ))}
+                    </Slider>
+                </div>
+            </section>
+        </>
     );
 }

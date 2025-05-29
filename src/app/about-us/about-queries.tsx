@@ -1,80 +1,39 @@
 import { gql } from '@apollo/client';
 import { client } from 'app/lib/apollo-client';
 
-interface AboutUsNode {
-  aboutUs?: {
-    heroContent?: string;
-    heroHeading?: string;
-    videoContent?: string;
-    videoHeading?: string;
-    videoUrl?: string;
-    videoImage?: {
-      node: {
-        sourceUrl: string;
-      };
-    };
-  };
-}
-
 export const ABOUT_US_QUERY = gql`
-    query AboutPage {
-        pages {
-            nodes {
-                aboutUs {
-                    heroContent
-                    heroHeading
-                    videoContent
-                    videoHeading
-                    videoUrl
-                    videoImage {
-                        node {
-                            sourceUrl
-                        }
-                    }
-                }
-            }
+query AboutPage {
+  page(id: "about-us", idType: URI) {
+    aboutUs {
+      heroHeading
+      heroContent
+      videoHeading
+      videoContent
+      videoImage {
+        node {
+          sourceUrl
         }
+      }
     }
+  }
+}
 `;
 
 export async function aboutdata() {
   const { data } = await client.query({ query: ABOUT_US_QUERY });
-  const aboutNode = data?.pages?.nodes?.find((node: AboutUsNode) => node?.aboutUs);
 
   return {
-    aboutpages: aboutNode?.aboutUs ?? {},
+    aboutpages: data?.page?.aboutUs ?? {},
   };
 }
 
 
 export const GALLERY_QUERY = gql`
     query AboutGallery {
-    pages {
-        nodes {
+      page(id: "about-us", idType: URI) {
         aboutUs {
-            galleryHeading
-            galleryImages {
-            image {
-                node {
-                sourceUrl
-                altText
-                }
-            }
-            }
-        }
-        }
-    }
-    }
-`;
-
-
-
-export const AWARD_QUERY = gql`
-query Award {
-    pages {
-      nodes {
-        aboutUs {
-          awardImage {
+          galleryHeading
+          galleryImages {
             image {
               node {
                 sourceUrl
@@ -82,7 +41,29 @@ query Award {
               }
             }
           }
-          awardHeading
+        }
+      }
+    }
+`;
+
+
+export const AWARD_QUERY = gql`
+  query Award {
+    page(id: "about-us", idType: URI) {
+      aboutUs {
+        awardImage {
+          image {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+        }
+        awardHeading
+        awardLink {
+          url
+          title
+          target
         }
       }
     }
@@ -108,19 +89,18 @@ query Counter {
 `;
 // server/email-services-fetcher.tsx
 
-const EMAILSERVICES_QUERY = gql`
+
+export const EMAILSERVICES_QUERY = gql`
   query EmailServices {
-    pages {
-      nodes {
-        aboutUs {
-          emailHeading
-          emailContent
-          logoImages {
-            image {
-              node {
-                altText
-                sourceUrl
-              }
+    page(id: "about-us", idType: URI) {
+      aboutUs {
+        emailHeading
+        emailContent
+        logoImages {
+          image {
+            node {
+              altText
+              sourceUrl
             }
           }
         }
@@ -137,7 +117,7 @@ export const fetchEmailServicesData = async () => {
     });
 
     // Extract the first page's aboutUs data
-    const aboutUs = data?.pages?.nodes[0]?.aboutUs || {};
+    const aboutUs = data?.page?.aboutUs || {};
 
     return {
       emailHeading: aboutUs.emailHeading || '',
@@ -156,20 +136,18 @@ export const fetchEmailServicesData = async () => {
 
 export const BRANDS_QUERY = gql`
     query BrandsData {
-        pages {
-            nodes {
+        page(id: "about-us", idType: URI) {
             aboutUs {
-                brandsHeading
-                brandsContent
-                brandsImages {
+              brandsHeading
+              brandsContent
+              brandsImages {
                 image {
                     node {
                     sourceUrl
                     altText
                     }
                 }
-                }
-            }
+              }
             }
         }
     }
@@ -179,8 +157,7 @@ export const BRANDS_QUERY = gql`
 
 export const INDUSTRIES_QUERY = gql`
   query industries {
-    pages {
-      nodes {
+   page(id: "about-us", idType: URI) {
         aboutUs {
           industriesTitle
           industriesContent
@@ -198,7 +175,6 @@ export const INDUSTRIES_QUERY = gql`
             url
             target
           }
-        }
       }
     }
   }

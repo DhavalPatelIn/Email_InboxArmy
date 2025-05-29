@@ -4,19 +4,63 @@ import MarketingAgency from "app/components/MarketingAgency";
 import InfiniteScrollTemplates from '../components/InfiniteScrollTemplates';
 import { getCategoriesData } from '../lib/categories';
 
+interface EmailTemplateData {
+  templates: {
+    nodes: {
+      title: string;
+      slug: string;
+      uri: string;
+      featuredImage: {
+        node: {
+          sourceUrl: string;
+        };
+      };
+    }[];
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string;
+    };
+  };
+  emailTypes?: {
+    nodes: {
+      id: string;
+      name: string;
+      slug: string;
+    }[];
+  };
+  industries?: {
+    nodes: {
+      id: string;
+      name: string;
+      slug: string;
+    }[];
+  };
+  seasonals?: {
+    nodes: {
+      id: string;
+      name: string;
+      slug: string;
+    }[];
+  };
+  types?: {
+    nodes: {
+      id: string;
+      name: string;
+      slug: string;
+    }[];
+  };
+}
+
 const EMAIL_TEMPLATES_QUERY = gql`
   query EmailTemplate($after: String) {
     templates(first: 6, after: $after) {
       nodes {
         title
+        slug
+        uri
         featuredImage {
           node {
             sourceUrl
-          }
-        }
-        emailTypes {
-          nodes {
-            name
           }
         }
       }
@@ -25,11 +69,32 @@ const EMAIL_TEMPLATES_QUERY = gql`
         endCursor
       }
     }
+    emailTypes(first: 30) {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+    industries(first: 30) {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
+    seasonals(first: 30) {
+      nodes {
+        id
+        name
+        slug
+      }
+    }
   }
 `;
 
 export default async function Categories() {
-  const { data } = await client.query({
+  const { data } = await client.query<EmailTemplateData>({
     query: EMAIL_TEMPLATES_QUERY,
   });
 
@@ -49,6 +114,9 @@ export default async function Categories() {
           initialTemplates={data.templates.nodes}
           hasNextPage={data.templates.pageInfo.hasNextPage}
           endCursor={data.templates.pageInfo.endCursor}
+          emailTypes={data.emailTypes?.nodes || []}
+          industries={data.industries?.nodes || []}
+          seasonals={data.seasonals?.nodes || []}
         />
       </div>
 

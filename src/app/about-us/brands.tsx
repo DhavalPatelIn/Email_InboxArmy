@@ -12,21 +12,10 @@ interface BrandsImage {
     }
 }
 
-
-interface BrandsNode {
-    aboutUs?: {
-        brandsHeading?: string;
-        brandsContent?: string;
-        brandsImages?: BrandsImage[];
-        sourceUrl: string;
-        altText: string;
-    }
-}
-
 async function getBrandsData() {
     const { data } = await client.query({ query: BRANDS_QUERY });
-    const brandsNode = data?.pages?.nodes?.find((node: BrandsNode) => node?.aboutUs);
-    return brandsNode?.aboutUs ?? {};
+    const brandsNode = data?.page?.aboutUs;
+    return brandsNode ?? {};
 }
 
 

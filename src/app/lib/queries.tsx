@@ -16,55 +16,72 @@ import { client } from './apollo-client';
 //     }
 //   }
 // }
+
+
 export const SEARCH_POSTS = gql`  
   query SearchQuery($search: String!) {
     templates(where: { search: $search }) {
       nodes {
+        id
         title
+        slug
         featuredImage {
           node {
             sourceUrl
           }
         }
-        contentType {
-          node {
-            connectedTaxonomies {
-              nodes {
-                name
-              }
-            }
+        emailTypes {
+          nodes {
+            name
+            slug
+          }
+        }
+        industries {
+          nodes {
+            name
+            slug
+          }
+        }
+        seasonals {
+          nodes {
+            name
+            slug
           }
         }
       }
-    }
-  }
-`;
-
-
-
-// Fetch post/page metadata
-export const GET_POST_METADATA = gql`
-  query GetPost($id: ID!) {
-    post(id: $id, idType: DATABASE_ID) {
-      id
-      title
-      excerpt
-      featuredImage {
-        node {
-          sourceUrl
-        }
-      }
-      seo {
-        metaDesc
-        opengraphTitle
-        opengraphDescription
-        opengraphImage {
-          mediaItemUrl
-        }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
 `;
+
+
+
+// // Fetch post/page metadata
+// export const GET_POST_METADATA = gql`
+//   query GetPost($id: ID!) {
+//     post(id: $id, idType: DATABASE_ID) {
+//       id
+//       title
+//       excerpt
+//       featuredImage {
+//         node {
+//           sourceUrl
+//         }
+//       }
+//       seo {
+//         metaDesc
+//         opengraphTitle
+//         opengraphDescription
+//         opengraphImage {
+//           mediaItemUrl
+//         }
+//       }
+//     }
+//   }
+// `;
 
 const GET_MENUDATA_QUERY = gql`
   query menudata {

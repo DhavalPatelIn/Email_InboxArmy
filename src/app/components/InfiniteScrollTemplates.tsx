@@ -19,18 +19,34 @@ interface Template {
             name: string;
         }>;
     };
+    industries?: {
+        nodes: Array<{
+            name: string;
+        }>;
+    };
+    seasonals?: {
+        nodes: Array<{
+            name: string;
+        }>;
+    };
 }
 
 interface InfiniteScrollTemplatesProps {
     initialTemplates: Template[];
     hasNextPage: boolean;
     endCursor: string;
+    emailTypes: Array<{ name: string; slug: string }>;
+    industries: Array<{ name: string; slug: string }>;
+    seasonals: Array<{ name: string; slug: string }>;
 }
 
 export default function InfiniteScrollTemplates({
     initialTemplates,
     hasNextPage: initialHasNextPage,
-    endCursor: initialEndCursor
+    endCursor: initialEndCursor,
+    emailTypes,
+    industries,
+    seasonals
 }: InfiniteScrollTemplatesProps) {
     const [templates, setTemplates] = useState<Template[]>(initialTemplates);
     const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
@@ -81,7 +97,9 @@ export default function InfiniteScrollTemplates({
                     key={`${template.title}-${index}`}
                     title={template.title}
                     image={template.featuredImage?.node?.sourceUrl || DEFAULT_IMAGE}
-                    tags={template.emailTypes?.nodes.map(tag => tag.name) || []}
+                    tags={emailTypes.map(tag => tag.name)}
+                    industries={industries.map(industry => industry.name)}
+                    seasonals={seasonals.map(seasonal => seasonal.name)}
                 />
             ))}
             {hasNextPage && (

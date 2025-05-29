@@ -329,6 +329,14 @@ textarea {
   background: radial-gradient(circle at 170px 600px, #1B2005 0%, #2E3B00 60%);
 }
 
+.catagery-data span {
+  display: none;
+}
+
+.catagery-data span:first-child {
+  display: block;
+}
+
 /* Search */
 .search-row input {
   padding-right: 50px;

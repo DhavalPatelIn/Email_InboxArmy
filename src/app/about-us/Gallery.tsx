@@ -11,17 +11,9 @@ interface GalleryImage {
     }
 }
 
-interface AboutUsNode {
-    aboutUs?: {
-        galleryHeading?: string;
-        galleryImages?: GalleryImage[];
-    }
-}
-
 async function getGalleryData() {
     const { data } = await client.query({ query: GALLERY_QUERY });
-    const galleryNode = data?.pages?.nodes?.find((node: AboutUsNode) => node?.aboutUs);
-    return galleryNode?.aboutUs ?? {};
+    return data?.page?.aboutUs ?? {};
 }
 
 export default async function Gallery() {

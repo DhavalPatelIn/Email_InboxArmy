@@ -1,24 +1,80 @@
 import Testimonials from "app/components/Testimonials";
 import Image from "next/image";
-
 import { getTestimonialsData } from '../about-us/server/testimonials-data';
-
 import './contact-style.css';
+import { gql } from "@apollo/client";
+import { client } from "../lib/apollo-client";
 
-import MapMaker from '../images/map-icon.png'
-import Email from '../images/email-icon.png'
-import Youtube from '../images/youtube.svg'
-import Dribbble from '../images/dribbble.svg'
-import Linkedin from '../images/linkedin.svg'
-import Be from '../images/be.svg'
-import Twitter from '../images/twitter.svg'
+interface SocialMedia {
+    image?: {
+        node?: {
+            sourceUrl: string;
+        };
+    };
+    link?: {
+        title: string;
+        url: string;
+        target: string;
+    };
+}
+
+const GET_CONTACT_PAGE_DATA = gql`
+query ContactPage {
+    pages {
+      nodes {
+        contactUs {
+          map
+          address {
+            addressText
+            addressIcon {
+              node {
+                sourceUrl
+              }
+            }
+          }
+          email {
+            emailIcon {
+              node {
+                sourceUrl
+              }
+            }
+            emailLink {
+              url
+              title
+              target
+            }
+          }
+          followUsTitle
+          socialMedia {
+            image {
+              node {
+                sourceUrl
+              }
+            }
+            link {
+              title
+              url
+              target
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 
 export default async function ContactUs() {
     const testimonials = await getTestimonialsData();
+    const { data } = await client.query({
+        query: GET_CONTACT_PAGE_DATA,
+    });
+
+    const contactData = data?.pages?.nodes[0]?.contactUs;
 
     return (
         <>
-            <div className="pb-4 pt-8 lg:py-24">
+            <div className="mb-4 mt-8 lg:my-24">
                 <div className="container">
                     <div className="flex flex-wrap">
                         <div className="w-full lg:w-3/5 contact-form pb-12 lg:pb-0">
@@ -89,72 +145,96 @@ export default async function ContactUs() {
                             </div>
                         </div>
                         {/* Contact Info & Social Links Section */}
-                        <div className="w-full lg:w-2/5 lg:pl-20">
-                            {/* Map */}
-                            <div className="rounded-2xl overflow-hidden mb-6 map-wrap">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3348.349691863997!2d-97.10254432433045!3d32.941775773595204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864dd4c90964e701%3A0xad08bb19ed40d08d!2s2150%20W%20Northwest%20Hwy%20SUITE%20114-1098%2C%20Grapevine%2C%20TX%2076501%2C%20USA!5e0!3m2!1sen!2sin!4v1747127638565!5m2!1sen!2sin" width="600" height="280" loading="lazy"></iframe>
-                            </div>
-                            <div className="space-y-6 lg:space-y-8 px-4 lg:px:0">
-                                <div className="flex items-start gap-3">
-                                    <div>
-                                        <span className="w-8 h-8 bg-theme-light-gray-2 rounded-lg flex items-center justify-center">
-                                            <Image className="w-4" src={MapMaker} alt="MapIcon" width={17} height={17} />
-                                        </span>
-                                    </div>
-                                    <span className="text-base md:text-lg">
-                                        2150 W NorthWest HWY, Suite 114-1098, Grapevine, TX-76051
-                                    </span>
-                                </div>
+                        {contactData && (
+                            <div className="w-full lg:w-2/5 lg:pl-20">
+                                {/* Map */}
+                                {contactData.map && (
+                                    <div className="rounded-2xl overflow-hidden mb-6 map-wrap" dangerouslySetInnerHTML={{ __html: contactData.map }}></div>
+                                )}
+                                <div className="space-y-6 lg:space-y-8 px-4 lg:px:0">
+                                    {contactData.address && (
+                                        <div className="flex items-start gap-3">
+                                            <div>
+                                                <span className="w-8 h-8 bg-theme-light-gray-2 rounded-lg flex items-center justify-center">
+                                                    <Image
+                                                        className="w-4"
+                                                        src={contactData.address.addressIcon?.node?.sourceUrl}
+                                                        alt="MapIcon"
+                                                        width={17}
+                                                        height={17}
+                                                    />
+                                                </span>
+                                            </div>
+                                            <span className="text-base md:text-lg">
+                                                {contactData.address.addressText}
+                                            </span>
+                                        </div>
+                                    )}
 
-                                <div className="flex items-start gap-3">
-                                    <div>
-                                        <span className="w-8 h-8 bg-theme-light-gray-2 rounded-lg flex items-center justify-center">
-                                            <Image className="w-4" src={Email} alt="MapIcon" width={16} height={16} />
-                                        </span>
-                                    </div>
-                                    <span>
-                                        <a className="text-base md:text-lg hover:underline" href="mailto:design@inboxarmy.com">design@inboxarmy.com</a>
-                                    </span>
+                                    {contactData.email && (
+                                        <div className="flex items-start gap-3">
+                                            <div>
+                                                <span className="w-8 h-8 bg-theme-light-gray-2 rounded-lg flex items-center justify-center">
+                                                    <Image
+                                                        className="w-4"
+                                                        src={contactData.email.emailIcon?.node?.sourceUrl}
+                                                        alt="EmailIcon"
+                                                        width={16}
+                                                        height={16}
+                                                    />
+                                                </span>
+                                            </div>
+                                            <span>
+                                                <a
+                                                    className="text-base md:text-lg hover:underline"
+                                                    href={contactData.email.emailLink?.url}
+                                                    target={contactData.email.emailLink?.target || "_self"}
+                                                >
+                                                    {contactData.email.emailLink?.title}
+                                                </a>
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
+                                {contactData.socialMedia && contactData.socialMedia.length > 0 && (
+                                    <>
+                                        <hr className="my-6 lg:my-8 border-theme-border" />
+                                        <div>
+                                            <h3 className="text-theme-dark font-intersemi font-semibold mb-6 text-lg w-full text-center lg:text-left uppercase">
+                                                {contactData.followUsTitle}
+                                            </h3>
+                                            <div className="flex flex-wrap items-center lg:items-start justify-center lg:justify-start lg:grid grid-cols-2 gap-x-4 lg:gap-x-8 gap-y-4 text-base w-full max-[275px]">
+                                                {contactData.socialMedia.map((social: SocialMedia, index: number) => (
+                                                    <a
+                                                        key={index}
+                                                        href={social.link?.url || "#"}
+                                                        className="flex items-center gap-2 hover:underline"
+                                                        target={social.link?.target || "_blank"}
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <span className="w-6">
+                                                            <Image
+                                                                className="w-6"
+                                                                src={social.image?.node?.sourceUrl || ""}
+                                                                alt={social.link?.title || "Social Media Icon"}
+                                                                width={25}
+                                                                height={25}
+                                                            />
+                                                        </span>
+                                                        {social.link?.title}
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            <hr className="my-6 lg:my-8 border-theme-border" />
-                            <div>
-                                <h3 className="text-theme-dark font-intersemi font-semibold mb-6 text-lg w-full text-center lg:text-left">FOLLOW US</h3>
-                                <div className="flex flex-wrap items-center lg:items-start justify-center lg:justify-start lg:grid grid-cols-2 gap-x-4 lg:gap-x-8 gap-y-4 text-base w-full max-[275px]">
-                                    <a href="https://youtube.com" className="flex items-center gap-2 hover:underline" target="_blank" rel="noopener noreferrer">
-                                        <span className="w-6">
-                                            <Image className="w-6" src={Youtube} alt="MapIcon" width={25} height={25} />
-                                        </span>
-                                        Youtube</a>
-                                    <a href="https://dribbble.com" className="flex items-center gap-2 hover:underline" target="_blank" rel="noopener noreferrer">
-                                        <span className="w-6">
-                                            <Image className="w-6" src={Dribbble} alt="MapIcon" width={25} height={25} />
-                                        </span>
-                                        Dribbble</a>
-                                    <a href="https://linkedin.com" className="flex items-center gap-2 hover:underline" target="_blank" rel="noopener noreferrer">
-                                        <span className="w-6">
-                                            <Image className="w-6" src={Linkedin} alt="MapIcon" width={25} height={25} />
-                                        </span>
-                                        LinkedIn</a>
-                                    <a href="https://behance.net" className="flex items-center gap-2 hover:underline" target="_blank" rel="noopener noreferrer">
-                                        <span className="w-6">
-                                            <Image className="w-6" src={Be} alt="MapIcon" width={25} height={25} />
-                                        </span>
-                                        Behence</a>
-                                    <a href="https://twitter.com" className="flex items-center gap-2 hover:underline" target="_blank" rel="noopener noreferrer">
-                                        <span className="w-6">
-                                            <Image className="w-6" src={Twitter} alt="MapIcon" width={25} height={25} />
-                                        </span>
-                                        Twitter</a>
-                                </div>
-                            </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
 
             <Testimonials testimonials={testimonials.testimonials} testimonialHeading={testimonials.testimonialHeading} />
-
         </>
     );
 }

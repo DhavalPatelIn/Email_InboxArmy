@@ -20,31 +20,13 @@ interface IndustriesImage {
     }
 }
 
-
-interface IndustriesNode {
-    aboutUs?: {
-        industriesTitle?: string;
-        industriesContent?: string;
-        industriesData?: IndustriesImage[];
-        image: {
-            node: {
-                sourceUrl: string;
-                altText: string;
-            }
-        }
-        industriesLink: {
-            title: string;
-            url: string;
-            target: string;
-        }
-    }
-}
-
 async function getIndustriesData() {
     const { data } = await client.query({ query: INDUSTRIES_QUERY });
-    const industriesNode = data?.pages?.nodes?.find((node: IndustriesNode) => node?.aboutUs);
-    return industriesNode?.aboutUs ?? {};
+    const industriesNode = data?.page?.aboutUs;
+    return industriesNode ?? {};
 }
+
+
 
 
 
@@ -74,7 +56,9 @@ export default async function Industries() {
                     </div>
 
                     <div className="md:flex justify-center">
-                        <a href={industriesLink.url} target={industriesLink.target} className="text-center block bg-theme-blue text-white  hover:bg-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base">{industriesLink.title}</a>
+                        {industriesLink?.url && (
+                            <a href={industriesLink.url} target={industriesLink.target} className="text-center block bg-theme-blue text-white  hover:bg-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base">{industriesLink.title}</a>
+                        )}
                     </div>
                 </div>
 

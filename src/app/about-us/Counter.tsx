@@ -11,6 +11,7 @@ interface CounterProps {
     }[];
 }
 
+
 export default function Counter({ counterData }: CounterProps) {
     const sectionRef = useRef<HTMLDivElement>(null);
     const [start, setStart] = useState(false);
