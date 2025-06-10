@@ -20,47 +20,45 @@ interface SocialMedia {
 
 const GET_CONTACT_PAGE_DATA = gql`
 query ContactPage {
-    pages {
-      nodes {
+    page(id: "contact-us", idType: URI) {
         contactUs {
-          map
-          address {
-            addressText
-            addressIcon {
-              node {
-                sourceUrl
-              }
+            map
+            address {
+                addressText
+                addressIcon {
+                    node {
+                        sourceUrl
+                    }
+                }
             }
-          }
-          email {
-            emailIcon {
-              node {
-                sourceUrl
-              }
+            email {
+                emailIcon {
+                    node {
+                        sourceUrl
+                    }
+                }
+                emailLink {
+                    url
+                    title
+                    target
+                }
             }
-            emailLink {
-              url
-              title
-              target
+            followUsTitle
+            socialMedia {
+                image {
+                    node {
+                        sourceUrl
+                    }
+                }
+                link {
+                    title
+                    url
+                    target
+                }
             }
-          }
-          followUsTitle
-          socialMedia {
-            image {
-              node {
-                sourceUrl
-              }
-            }
-            link {
-              title
-              url
-              target
-            }
-          }
         }
-      }
     }
-  }
+}
 `;
 
 
@@ -70,7 +68,7 @@ export default async function ContactUs() {
         query: GET_CONTACT_PAGE_DATA,
     });
 
-    const contactData = data?.pages?.nodes[0]?.contactUs;
+    const contactData = data?.page?.contactUs;
 
     return (
         <>

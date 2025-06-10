@@ -1,10 +1,11 @@
 import { client } from './lib/apollo-client';
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 import InfiniteScrollTemplates from './components/InfiniteScrollTemplates';
 import HeroSection from "./components/HeroBanner";
+import { getBrandData } from './lib/queries';
 
 interface EmailTemplateData {
-  templates: {
+  posts: {
     nodes: {
       title: string;
       slug: string;
@@ -14,45 +15,45 @@ interface EmailTemplateData {
           sourceUrl: string;
         };
       };
+      emailTypes?: {
+        nodes: {
+          id: string;
+          name: string;
+          slug: string;
+        }[];
+      };
+      industries?: {
+        nodes: {
+          id: string;
+          name: string;
+          slug: string;
+        }[];
+      };
+      seasonals?: {
+        nodes: {
+          id: string;
+          name: string;
+          slug: string;
+        }[];
+      };
+      types?: {
+        nodes: {
+          id: string;
+          name: string;
+          slug: string;
+        }[];
+      };
     }[];
     pageInfo: {
       hasNextPage: boolean;
       endCursor: string;
     };
   };
-  emailTypes?: {
-    nodes: {
-      id: string;
-      name: string;
-      slug: string;
-    }[];
-  };
-  industries?: {
-    nodes: {
-      id: string;
-      name: string;
-      slug: string;
-    }[];
-  };
-  seasonals?: {
-    nodes: {
-      id: string;
-      name: string;
-      slug: string;
-    }[];
-  };
-  types?: {
-    nodes: {
-      id: string;
-      name: string;
-      slug: string;
-    }[];
-  };
 }
 
 const EMAIL_TEMPLATES_QUERY = gql`
   query EmailTemplate($after: String) {
-    templates(first: 6, after: $after) {
+    posts(first: 11, after: $after) {
       nodes {
         title
         slug
@@ -61,6 +62,27 @@ const EMAIL_TEMPLATES_QUERY = gql`
           node {
             sourceUrl
           }
+        }      
+        emailTypes(first: 1) {
+          nodes {
+            id
+            name
+            slug
+          }
+        }
+        industries(first: 1) {
+          nodes {
+            id
+            name
+            slug
+          }
+        }
+        seasonals(first: 1) {
+          nodes {
+            id
+            name
+            slug
+          }
         }
       }
       pageInfo {
@@ -68,30 +90,9 @@ const EMAIL_TEMPLATES_QUERY = gql`
         endCursor
       }
     }
-    emailTypes(first: 30) {
-      nodes {
-        id
-        name
-        slug
-      }
-    }
-    industries(first: 30) {
-      nodes {
-        id
-        name
-        slug
-      }
-    }
-    seasonals(first: 30) {
-      nodes {
-        id
-        name
-        slug
-      }
-    }
+     
   }
 `;
-
 
 export default async function Home() {
   try {
@@ -99,6 +100,7 @@ export default async function Home() {
       query: EMAIL_TEMPLATES_QUERY,
     });
 
+    const { adBoxes } = await getBrandData();
 
     return (
       <>
@@ -106,14 +108,11 @@ export default async function Home() {
 
         <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-6">
           <InfiniteScrollTemplates
-            initialTemplates={data.templates.nodes}
-            hasNextPage={data.templates.pageInfo.hasNextPage}
-            endCursor={data.templates.pageInfo.endCursor}
-            emailTypes={data.emailTypes?.nodes || []}
-            industries={data.industries?.nodes || []}
-            seasonals={data.seasonals?.nodes || []}
+            initialTemplates={data.posts.nodes}
+            hasNextPage={data.posts.pageInfo.hasNextPage}
+            endCursor={data.posts.pageInfo.endCursor}
+            adBoxes={adBoxes}
           />
-
         </div>
       </>
     );

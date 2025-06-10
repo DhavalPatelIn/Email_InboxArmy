@@ -1,7 +1,13 @@
-.top-header,
-body {
+/*.top-header,body */
+.email-wrapper,
+.related-category-post {
     background-color: var(--theme-light-gray);
 }
+
+
+/* .search-row input {
+    background-color: #ffffff;
+} */
 
 .active.left-button {
     background: var(--theme-blue);
@@ -11,8 +17,8 @@ body {
 
 body {
     overflow: initial;
+    background: none !important;
 }
-
 
 
 .dark-light-mode {
@@ -31,7 +37,7 @@ body {
     content: '';
     height: 14px;
     width: 14px;
-    box-shadow: 0 1.3px 1.3px rgba(0, 0, 0, 0.25%);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
     background-color: #fff;
     position: absolute;
     top: 0;
@@ -114,6 +120,12 @@ body {
     transition: all 0.3s ease-in-out;
 }
 
+.email-postdata iframe {
+    width: 100%;
+    height: 100vh;
+    border: none;
+}
+
 @media(min-width: 768px) {
 
     .left-button:hover path {
@@ -169,6 +181,10 @@ body {
         width: 10px;
     }
 
+    .active.left-button {
+        color: rgba(0, 0, 0, 0.8);
+    }
+
     #DarkMode:checked~.dark-light-mode:after {
         left: 14px;
     }
@@ -176,4 +192,16 @@ body {
     .active.left-button {
         background: none;
     }
+}
+
+
+.email-code pre {
+    overflow: auto;
+    padding: 10px;
+    background-color: var(--theme-light-gray-2) !important;
+}
+
+.email-code pre span {
+    text-shadow: none;
+    font-size: 18px;
 }

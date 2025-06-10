@@ -5,10 +5,10 @@ import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
 
-// Email Type By Slug
-const GET_EMAIL_TYPE_BY_SLUG = gql`
-  query EmailTemplate($slug: [String]) {
-    emailTypes(where: { slug: $slug }) {
+// Seasonal By Slug
+const GET_SEASONAL_BY_SLUG = gql`
+  query SeasonalTemplate($slug: [String]) {
+    seasonals(where: { slug: $slug }) {
       nodes {
         id
         name
@@ -38,6 +38,7 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
                 name
               }
             }
+           
           }
           pageInfo {
             hasNextPage
@@ -50,20 +51,20 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
 `;
 
 
-export default async function EmailTypePage({ params }: { params: Promise<Params> }) {
+export default async function SeasonalPage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
   const { data } = await client.query({
-    query: GET_EMAIL_TYPE_BY_SLUG,
+    query: GET_SEASONAL_BY_SLUG,
     variables: {
       slug: [resolvedParams.slug], // pass slug as array
     },
   });
 
-  const emailTypeNode = data.emailTypes?.nodes?.[0];
+  const seasonalNode = data.seasonals?.nodes?.[0];
   const categoriesData = await getCategoriesData();
 
   // If no data is found, show message
-  if (!emailTypeNode) {
+  if (!seasonalNode) {
     return (
       <div className="container py-20">
         <div className="text-center text-3xl text-red-500 font-bold">
@@ -85,9 +86,9 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
 
       <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-6">
         <InfiniteScrollTemplates
-          initialTemplates={emailTypeNode?.posts?.nodes || []}
-          hasNextPage={emailTypeNode?.posts?.pageInfo.hasNextPage}
-          endCursor={emailTypeNode?.posts?.pageInfo.endCursor}
+          initialTemplates={seasonalNode?.posts?.nodes || []}
+          hasNextPage={seasonalNode?.posts?.pageInfo.hasNextPage}
+          endCursor={seasonalNode?.posts?.pageInfo.endCursor}
           adBoxes={[]}
         />
       </div>

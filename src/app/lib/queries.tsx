@@ -1,26 +1,9 @@
 import { gql } from '@apollo/client';
 import { client } from './apollo-client';
 
-// export const SEARCH_POSTS = gql`
-// query SearchPosts($search: String!) {
-//   posts(where: { search: $search }) {
-//     nodes {
-//       id
-//       title
-//       slug
-//       featuredImage {
-//         node {
-//           sourceUrl
-//         }
-//       }
-//     }
-//   }
-// }
-
-
 export const SEARCH_POSTS = gql`  
   query SearchQuery($search: String!) {
-    templates(where: { search: $search }) {
+    posts(where: { search: $search }) {
       nodes {
         id
         title
@@ -57,32 +40,6 @@ export const SEARCH_POSTS = gql`
   }
 `;
 
-
-
-// // Fetch post/page metadata
-// export const GET_POST_METADATA = gql`
-//   query GetPost($id: ID!) {
-//     post(id: $id, idType: DATABASE_ID) {
-//       id
-//       title
-//       excerpt
-//       featuredImage {
-//         node {
-//           sourceUrl
-//         }
-//       }
-//       seo {
-//         metaDesc
-//         opengraphTitle
-//         opengraphDescription
-//         opengraphImage {
-//           mediaItemUrl
-//         }
-//       }
-//     }
-//   }
-// `;
-
 const GET_MENUDATA_QUERY = gql`
   query menudata {
     emailTypes(first: 30) {
@@ -115,3 +72,31 @@ export async function postdata() {
   };
 }
 
+export const GET_BRAND_QUERY = gql`
+  query GetBrand {
+    themeoptions {
+      globaldata {
+        adBoxes {
+          title
+          icon {
+            node {
+              sourceUrl
+            }
+          }
+          cta {
+            url
+            title
+            target
+          }
+        }
+      }
+    }
+  }
+`;
+
+export async function getBrandData() {
+  const { data } = await client.query({ query: GET_BRAND_QUERY });
+  return {
+    adBoxes: data?.themeoptions?.globaldata?.adBoxes ?? [],
+  };
+}

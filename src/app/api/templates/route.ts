@@ -4,15 +4,27 @@ import { gql } from '@apollo/client';
 
 const EMAIL_TEMPLATES_QUERY = gql`
   query EmailTemplate($after: String) {
-    templates(first: 6, after: $after) {
+    posts(first: 11, after: $after) {
       nodes {
         title
+        slug
+        uri
         featuredImage {
           node {
             sourceUrl
           }
         }
         emailTypes {
+          nodes {
+            name
+          }
+        }
+        industries {
+          nodes {
+            name
+          }
+        }
+        seasonals {
           nodes {
             name
           }

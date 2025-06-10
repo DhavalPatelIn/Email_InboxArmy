@@ -125,7 +125,8 @@ html,
 body {
   max-width: 100%;
   overflow-x: hidden;
-  color: var();
+  color: var(--theme-dark);
+  background: none;
 }
 
 body {
@@ -285,6 +286,10 @@ textarea {
 }
 
 /* Header */
+.top-header {
+  background-color: #fff;
+}
+
 .sticky-header {
   background: #1B2005;
   background: linear-gradient(90deg, rgba(27, 32, 5, 1) 0%, rgba(46, 59, 0, 1) 100%);
@@ -308,18 +313,25 @@ textarea {
 
 /* Header */
 
+.email-image {
+  background-image: url(../images/inboxarmy-logo.svg);
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .email-image img {
   top: 0;
   -webkit-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
 
-.email-link:hover .email-image img {
+/* .email-link:hover .email-image img {
   top: 100%;
   transform: translate(0, -100%);
   -webkit-transition: all 3s ease-in-out;
   transition: all 3s ease-in-out;
-}
+} */
 
 .shadow-custom {
   box-shadow: 0 6px 25px rgba(86, 92, 56, 0.1);
@@ -342,6 +354,7 @@ textarea {
 .search-row input {
   padding-right: 50px;
 }
+
 
 
 @media(max-width: 1279px) {

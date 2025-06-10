@@ -49,7 +49,7 @@ export default async function SearchPage(props: PageProps) {
             variables: { search: keyword },
         });
 
-        if (!data?.templates?.nodes || data.templates.nodes.length === 0) {
+        if (!data?.posts?.nodes || data.posts.nodes.length === 0) {
             return (
                 <div className="px-6 py-40 text-center w-full">
                     <div className="h2">No results found.</div>
@@ -62,7 +62,7 @@ export default async function SearchPage(props: PageProps) {
                 <div className="container">
                     <h1 className="text-center pb-8 md:mb-12">Search Results for: {keyword}</h1>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-y-4 gap-x-2 md:gap-5 2xl:gap-8 pb-4 md:pb-12">
-                        {data.templates.nodes.map((post: Post) => (
+                        {data.posts.nodes.map((post: Post) => (
                             <div
                                 key={post.id}
                                 className="w-full bg-white shadow-custom rounded-md md:rounded-xl border border-solid border-theme-border overflow-hidden"

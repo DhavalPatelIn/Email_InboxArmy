@@ -5,10 +5,11 @@ import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
 
-// Email Type By Slug
-const GET_EMAIL_TYPE_BY_SLUG = gql`
-  query EmailTemplate($slug: [String]) {
-    emailTypes(where: { slug: $slug }) {
+
+// Industries By Slug
+const GET_INDUSTRY_WITH_POSTS = gql`
+  query IndustryWithPosts($slug: [String]) {
+    industries(where: { slug: $slug }) {
       nodes {
         id
         name
@@ -49,33 +50,32 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
   }
 `;
 
-
-export default async function EmailTypePage({ params }: { params: Promise<Params> }) {
+export default async function IndustryPage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
   const { data } = await client.query({
-    query: GET_EMAIL_TYPE_BY_SLUG,
+    query: GET_INDUSTRY_WITH_POSTS,
     variables: {
       slug: [resolvedParams.slug], // pass slug as array
     },
   });
 
-  const emailTypeNode = data.emailTypes?.nodes?.[0];
-  const categoriesData = await getCategoriesData();
+  const industryNode = data.industries?.nodes?.[0];
 
+  const categoriesData = await getCategoriesData();
   // If no data is found, show message
-  if (!emailTypeNode) {
+  if (!industryNode) {
     return (
-      <div className="container py-20">
-        <div className="text-center text-3xl text-red-500 font-bold">
-          Data not found
+      <div className="container">
+        <div className="text-center py-10 md:py-20 max-w-6xl w-full m-auto">
+          <h1 className="text-2xl font-semibold">Data not Found</h1>
         </div>
       </div>
     );
   }
 
-
   return (
     <>
+
       <div className="container">
         <div className="text-center py-10 md:py-20 max-w-6xl w-full m-auto">
           <h1 className="leading-tight tracking-tight pb-6 pt-4 md:py-5 block">{categoriesData?.topHeading}</h1>
@@ -85,12 +85,13 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
 
       <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-6">
         <InfiniteScrollTemplates
-          initialTemplates={emailTypeNode?.posts?.nodes || []}
-          hasNextPage={emailTypeNode?.posts?.pageInfo.hasNextPage}
-          endCursor={emailTypeNode?.posts?.pageInfo.endCursor}
+          initialTemplates={industryNode?.posts?.nodes || []}
+          hasNextPage={industryNode?.posts?.pageInfo.hasNextPage}
+          endCursor={industryNode?.posts?.pageInfo.endCursor}
           adBoxes={[]}
         />
       </div>
+
 
       <MarketingAgency marketingAgency={{
         title: '',
