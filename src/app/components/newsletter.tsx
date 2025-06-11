@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import SearchIcon from '../images/search-icon.svg'
+import SearchIcon from '../images/submit-icon.svg'
 
 export default function Newsletter() {
     const [formData, setFormData] = useState({
@@ -126,7 +126,7 @@ export default function Newsletter() {
                             disabled={loading}
                             className={`bg-theme-blue hover:bg-theme-dark px-3 py-0 rounded-md text-white border-none absolute top-1 right-1 bottom-1 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                         >
-                            <Image src={SearchIcon} width={15} height={15} alt="Icon" />
+                            <Image className='w-4 h-4' src={SearchIcon} width={15} height={15} alt="Icon" />
                         </button>
                     </div>
 
