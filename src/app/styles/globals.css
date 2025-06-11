@@ -600,3 +600,7 @@ textarea {
     font-size: 18px;
   }
 }
+
+.newsletter-form input[type="email"] {
+  padding-right: 55px;
+}

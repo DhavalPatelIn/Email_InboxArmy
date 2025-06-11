@@ -100,3 +100,52 @@ export async function getBrandData() {
     adBoxes: data?.themeoptions?.globaldata?.adBoxes ?? [],
   };
 }
+
+export const GET_BRANDS_QUERY = gql`
+  query BrandsData {
+    brands(first: 10000)  {
+      nodes {
+        featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+          slug
+          title
+          brandCategories {
+            nodes {
+              name
+              slug
+            }
+          }
+        }
+      }
+  }
+`;
+
+export async function getBrandsData() {
+  const { data } = await client.query({ query: GET_BRANDS_QUERY });
+  return {
+    brands: data?.brands?.nodes ?? [],
+  };
+}
+
+
+export const GET_BRAND_CATEGORIES_QUERY = gql`
+query BrandsData {
+  brandCategories {
+    nodes {
+      name
+      slug
+    }
+  }
+}
+`;
+
+export async function getBrandCategoriesData() {
+  const { data } = await client.query({ query: GET_BRAND_CATEGORIES_QUERY });
+  return {
+    brandCategories: data?.brandCategories?.nodes ?? [],
+  };
+}
