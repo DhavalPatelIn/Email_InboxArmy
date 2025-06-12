@@ -4,6 +4,26 @@ import InfiniteScrollTemplates from '../../components/InfiniteScrollTemplates';
 import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
+import { getBrandData } from 'app/lib/queries';
+import { Metadata } from 'next';
+
+const GET_SEASONAL_SEO_BY_SLUG = gql`
+query Seasonal($slug: [String]) {
+    seasonals(where: { slug: $slug }) {
+      nodes {
+        seo {
+          title
+          metaDesc
+          opengraphTitle
+          opengraphDescription
+          opengraphImage {
+            sourceUrl
+          }
+        }
+      }
+    }
+  }
+`;
 
 // Seasonal By Slug
 const GET_SEASONAL_BY_SLUG = gql`
@@ -13,7 +33,7 @@ const GET_SEASONAL_BY_SLUG = gql`
         id
         name
         slug
-        posts(first: 6) {
+        posts(first: 11) {
           nodes {
             title
             slug
@@ -50,7 +70,28 @@ const GET_SEASONAL_BY_SLUG = gql`
   }
 `;
 
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
 
+  const resolvedParams = await params;
+  const { data } = await client.query({
+    query: GET_SEASONAL_SEO_BY_SLUG,
+    variables: {
+      slug: [resolvedParams.slug],
+    },
+  });
+
+  const seo = data?.seasonals?.nodes?.[0]?.seo;
+
+  return {
+    title: seo?.title || 'Seasonal Page',
+    description: seo?.metaDesc || '',
+    openGraph: {
+      title: seo?.opengraphTitle || seo?.title || 'Seasonal Page',
+      description: seo?.opengraphDescription || seo?.metaDesc || '',
+      images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+    },
+  };
+}
 export default async function SeasonalPage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
   const { data } = await client.query({
@@ -62,7 +103,7 @@ export default async function SeasonalPage({ params }: { params: Promise<Params>
 
   const seasonalNode = data.seasonals?.nodes?.[0];
   const categoriesData = await getCategoriesData();
-
+  const { adBoxes } = await getBrandData();
   // If no data is found, show message
   if (!seasonalNode) {
     return (
@@ -89,7 +130,7 @@ export default async function SeasonalPage({ params }: { params: Promise<Params>
           initialTemplates={seasonalNode?.posts?.nodes || []}
           hasNextPage={seasonalNode?.posts?.pageInfo.hasNextPage}
           endCursor={seasonalNode?.posts?.pageInfo.endCursor}
-          adBoxes={[]}
+          adBoxes={adBoxes}
         />
       </div>
 

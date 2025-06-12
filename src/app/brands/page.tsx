@@ -1,6 +1,22 @@
 import MarketingAgency from 'app/components/MarketingAgency';
 import BrandsSearch from './BrandsSearch';
 import { getBrandCategoriesData, getBrandsData } from '../lib/queries';
+import { Metadata } from 'next';
+import { client } from 'app/lib/apollo-client';
+import { GET_BRANDS_QUERY } from '../lib/queries';
+
+export async function generateMetadata(): Promise<Metadata> {
+    const { data } = await client.query({
+        query: GET_BRANDS_QUERY,
+    });
+
+    const seo = data?.page?.seo;
+
+    return {
+        title: seo?.title || 'Brands',
+        description: seo?.metaDesc || '',
+    };
+}
 
 export default async function Brands() {
     const { brands } = await getBrandsData();

@@ -42,19 +42,19 @@ export const SEARCH_POSTS = gql`
 
 const GET_MENUDATA_QUERY = gql`
   query menudata {
-    emailTypes(first: 30) {
+    emailTypes(first: 1000000) {
       nodes {
         name
         slug
       }
     }
-    seasonals(first: 30) {
+    seasonals(first: 1000000) {
       nodes {
         name
         slug
       }
     }
-    industries(first: 30) {
+    industries(first: 1000000) {
       nodes {
         name
         slug
@@ -105,6 +105,15 @@ export const GET_BRANDS_QUERY = gql`
   query BrandsData {
     brands(first: 10000)  {
       nodes {
+        seo {
+          title
+          metaDesc
+          opengraphTitle
+          opengraphDescription
+          opengraphImage {
+            sourceUrl
+          }
+        }
         featuredImage {
             node {
               sourceUrl

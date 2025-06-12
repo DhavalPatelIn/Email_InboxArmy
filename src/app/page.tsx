@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 import InfiniteScrollTemplates from './components/InfiniteScrollTemplates';
 import HeroSection from "./components/HeroBanner";
 import { getBrandData } from './lib/queries';
-
+import { Metadata } from 'next';
 interface EmailTemplateData {
   posts: {
     nodes: {
@@ -51,9 +51,26 @@ interface EmailTemplateData {
   };
 }
 
+const GET_HOME_PAGE_DATA = gql`
+query HomePage {
+    page(id: "home", idType: URI) {
+    seo {
+      title
+      metaDesc
+      opengraphTitle
+      opengraphDescription
+      opengraphImage {
+        sourceUrl
+      }
+    }
+  }
+}
+`;
+
 const EMAIL_TEMPLATES_QUERY = gql`
   query EmailTemplate($after: String) {
     posts(first: 11, after: $after) {
+     
       nodes {
         title
         slug
@@ -93,6 +110,24 @@ const EMAIL_TEMPLATES_QUERY = gql`
      
   }
 `;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { data } = await client.query({
+    query: GET_HOME_PAGE_DATA,
+  });
+
+  const seo = data?.page?.seo;
+
+  return {
+    title: seo?.title || 'Home',
+    description: seo?.metaDesc || '',
+    openGraph: {
+      title: seo?.opengraphTitle || seo?.title || 'Home',
+      description: seo?.opengraphDescription || seo?.metaDesc || '',
+      images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+    },
+  };
+}
 
 export default async function Home() {
   try {

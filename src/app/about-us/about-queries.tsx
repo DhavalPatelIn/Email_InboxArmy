@@ -4,6 +4,15 @@ import { client } from 'app/lib/apollo-client';
 export const ABOUT_US_QUERY = gql`
 query AboutPage {
   page(id: "about-us", idType: URI) {
+    seo {
+      title
+      metaDesc
+      opengraphTitle
+      opengraphDescription
+      opengraphImage {
+        sourceUrl
+      }
+    }
     aboutUs {
       heroHeading
       heroContent

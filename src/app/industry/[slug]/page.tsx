@@ -4,7 +4,26 @@ import InfiniteScrollTemplates from '../../components/InfiniteScrollTemplates';
 import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
+import { getBrandData } from 'app/lib/queries';
+import { Metadata } from 'next';
 
+const GET_INDUSTRY_SEO_BY_SLUG = gql`
+query Industry($slug: [String]) {
+    industries(where: { slug: $slug }) {
+      nodes {
+        seo {
+          title
+          metaDesc
+          opengraphTitle
+          opengraphDescription
+          opengraphImage {
+            sourceUrl
+          }
+        }
+      }
+    }
+  }
+`;
 
 // Industries By Slug
 const GET_INDUSTRY_WITH_POSTS = gql`
@@ -14,7 +33,7 @@ const GET_INDUSTRY_WITH_POSTS = gql`
         id
         name
         slug
-        posts(first: 6) {
+        posts(first: 11) {
           nodes {
             title
             slug
@@ -50,6 +69,29 @@ const GET_INDUSTRY_WITH_POSTS = gql`
   }
 `;
 
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+
+  const resolvedParams = await params;
+  const { data } = await client.query({
+    query: GET_INDUSTRY_SEO_BY_SLUG,
+    variables: {
+      slug: [resolvedParams.slug],
+    },
+  });
+
+  const seo = data?.industries?.nodes?.[0]?.seo;
+
+  return {
+    title: seo?.title || 'Industry Page',
+    description: seo?.metaDesc || '',
+    openGraph: {
+      title: seo?.opengraphTitle || seo?.title || 'Industry Page',
+      description: seo?.opengraphDescription || seo?.metaDesc || '',
+      images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+    },
+  };
+}
+
 export default async function IndustryPage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
   const { data } = await client.query({
@@ -62,6 +104,7 @@ export default async function IndustryPage({ params }: { params: Promise<Params>
   const industryNode = data.industries?.nodes?.[0];
 
   const categoriesData = await getCategoriesData();
+  const { adBoxes } = await getBrandData();
   // If no data is found, show message
   if (!industryNode) {
     return (
@@ -88,7 +131,7 @@ export default async function IndustryPage({ params }: { params: Promise<Params>
           initialTemplates={industryNode?.posts?.nodes || []}
           hasNextPage={industryNode?.posts?.pageInfo.hasNextPage}
           endCursor={industryNode?.posts?.pageInfo.endCursor}
-          adBoxes={[]}
+          adBoxes={adBoxes}
         />
       </div>
 

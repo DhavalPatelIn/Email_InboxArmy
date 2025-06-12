@@ -4,6 +4,26 @@ import InfiniteScrollTemplates from '../../components/InfiniteScrollTemplates';
 import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
+import { getBrandData } from '../../lib/queries';
+import { Metadata } from 'next';
+
+const GET_EMAIL_TYPE_SEO_BY_SLUG = gql`
+query EmailTemplate($slug: [String]) {
+    emailTypes(where: { slug: $slug }) {
+      nodes {
+        seo {
+          title
+          metaDesc
+          opengraphTitle
+          opengraphDescription
+          opengraphImage {
+            sourceUrl
+          }
+        }
+      }
+    }
+  }
+`;
 
 // Email Type By Slug
 const GET_EMAIL_TYPE_BY_SLUG = gql`
@@ -13,7 +33,7 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
         id
         name
         slug
-        posts(first: 6) {
+        posts(first: 11) {
           nodes {
             title
             slug
@@ -49,6 +69,27 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
   }
 `;
 
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { data } = await client.query({
+    query: GET_EMAIL_TYPE_SEO_BY_SLUG,
+    variables: {
+      slug: [resolvedParams.slug],
+    },
+  });
+
+  const seo = data?.emailTypes?.nodes?.[0]?.seo;
+
+  return {
+    title: seo?.title || 'Email Type Page',
+    description: seo?.metaDesc || '',
+    openGraph: {
+      title: seo?.opengraphTitle || seo?.title || 'Email Type Page',
+      description: seo?.opengraphDescription || seo?.metaDesc || '',
+      images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+    },
+  };
+}
 
 export default async function EmailTypePage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
@@ -73,6 +114,7 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
     );
   }
 
+  const { adBoxes } = await getBrandData();
 
   return (
     <>
@@ -88,7 +130,7 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
           initialTemplates={emailTypeNode?.posts?.nodes || []}
           hasNextPage={emailTypeNode?.posts?.pageInfo.hasNextPage}
           endCursor={emailTypeNode?.posts?.pageInfo.endCursor}
-          adBoxes={[]}
+          adBoxes={adBoxes}
         />
       </div>
 

@@ -537,6 +537,10 @@ textarea {
     stroke: #fff;
   }
 
+  .category-child:checked~.w-full {
+    margin-bottom: 10px;
+  }
+
 
 }
 
@@ -556,8 +560,8 @@ textarea {
     margin-left: 4px;
   }
 
-  .agency-box .info-text:nth-child(3) {
-    margin-top: 8px;
+  .agency-box .info-text {
+    margin: 8px 0;
     width: 100%;
   }
 }

@@ -12,6 +12,28 @@ import HeroTitle from './HeroTitle';
 import { getCounterData } from './server/counter-data';
 import EmailService from './EmailService';
 import { getTestimonialsData } from './server/testimonials-data';
+import { Metadata } from 'next';
+import { client } from 'app/lib/apollo-client';
+import { ABOUT_US_QUERY } from './about-queries';
+
+
+export async function generateMetadata(): Promise<Metadata> {
+    const { data } = await client.query({
+        query: ABOUT_US_QUERY,
+    });
+
+    const seo = data?.page?.seo;
+
+    return {
+        title: seo?.title || 'About Us',
+        description: seo?.metaDesc || '',
+        openGraph: {
+            title: seo?.opengraphTitle || seo?.title || 'About Us',
+            description: seo?.opengraphDescription || seo?.metaDesc || '',
+            images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+        },
+    };
+}
 
 export default async function AboutUs() {
     const { counterData } = await getCounterData();

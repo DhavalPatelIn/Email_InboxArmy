@@ -6,11 +6,42 @@ import Header from './components/header';
 import Footer from './components/footer';
 import GlobalLoader from './components/GlobalLoader';
 import Script from 'next/script';
+import { client } from './lib/apollo-client';
+import { gql } from '@apollo/client';
 
-export const metadata: Metadata = {
-  title: "A Full-Service Email Marketing Agency - InboxArmy",
-  description: "We are a full service email marketing agency offering email campaign management, setting up automations, template production &amp; much more.",
-};
+const GET_HOME_PAGE_DATA = gql`
+query HomePage {
+    page(id: "home", idType: URI) {
+    seo {
+      title
+      metaDesc
+      opengraphTitle
+      opengraphDescription
+      opengraphImage {
+        sourceUrl
+      }
+    }
+  }
+}
+`;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { data } = await client.query({
+    query: GET_HOME_PAGE_DATA,
+  });
+
+  const seo = data?.page?.seo;
+
+  return {
+    title: seo?.title || 'Home',
+    description: seo?.metaDesc || '',
+    openGraph: {
+      title: seo?.opengraphTitle || seo?.title || 'Home',
+      description: seo?.opengraphDescription || seo?.metaDesc || '',
+      images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+    },
+  };
+}
 
 export default function RootLayout({
   children,

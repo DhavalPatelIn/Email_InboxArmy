@@ -6,6 +6,7 @@ import { gql } from "@apollo/client";
 import { client } from "../lib/apollo-client";
 import { ContactForm } from "./contactform";
 import MapComponent from "../components/mapcomponents";
+import { Metadata } from 'next';
 
 interface SocialMedia {
     image?: {
@@ -23,6 +24,15 @@ interface SocialMedia {
 const GET_CONTACT_PAGE_DATA = gql`
 query ContactPage {
     page(id: "contact-us", idType: URI) {
+    seo {
+      title
+      metaDesc
+      opengraphTitle
+      opengraphDescription
+      opengraphImage {
+        sourceUrl
+      }
+    }
         contactUs {
         formTitle
       formContent
@@ -65,6 +75,23 @@ query ContactPage {
 }
 `;
 
+export async function generateMetadata(): Promise<Metadata> {
+    const { data } = await client.query({
+        query: GET_CONTACT_PAGE_DATA,
+    });
+
+    const seo = data?.page?.seo;
+
+    return {
+        title: seo?.title || 'Contact Us',
+        description: seo?.metaDesc || '',
+        openGraph: {
+            title: seo?.opengraphTitle || seo?.title || 'Contact Us',
+            description: seo?.opengraphDescription || seo?.metaDesc || '',
+            images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+        },
+    };
+}
 
 export default async function ContactUs() {
     const testimonials = await getTestimonialsData();
