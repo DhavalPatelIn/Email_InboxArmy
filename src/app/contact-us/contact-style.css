@@ -17,6 +17,8 @@
     border: 1px solid #E0E0E0;
     padding: 20px;
     border-radius: 12px;
+    outline: none;
+    box-shadow: none;
 }
 
 .contact-form input::-webkit-input-placeholder {

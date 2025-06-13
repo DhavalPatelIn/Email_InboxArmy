@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import CategoryeScript from './category-script';
 import './category-detail.css';
 import CodeView from './CodeView';
+import BodyClassHandler from '../components/BodyClassHandler';
 
 import Image from 'next/image';
 import DateIcon from '../images/date-icon.svg';
@@ -127,7 +128,9 @@ export default async function PostDetail({ params }) {
 
         return (
             <>
-                <div className='bg-theme-light-gray-2'>
+                <BodyClassHandler classname='page-category-detail' />
+                <span className='absolute top-0 left-0 w-full h-[100px] bg-theme-light-gray z-10'></span>
+                <div className='bg-theme-light-gray'>
 
                     <CategoryeScript>
                         <main className="email-wrapper pb-10 md:py-16 md:pb-10 xl:py-24 desktopmode xl:px-4">
@@ -184,6 +187,7 @@ export default async function PostDetail({ params }) {
                                                                 href={post.featuredImage.node.sourceUrl}
                                                                 download={post.featuredImage.node.sourceUrl}
                                                                 rel="noopener noreferrer"
+                                                                target="_blank"
                                                                 className="download-button text-xs md:text-base bg-transparent md:hover:bg-theme-blue md:hover:text-white flex items-center justify-center px-0 md:px-4 py-1 md:py-2 rounded-lg whitespace-nowrap border-none left-button"
                                                             >
                                                                 <span className='icon-wrap'>
@@ -200,12 +204,12 @@ export default async function PostDetail({ params }) {
 
                                             <div className="email-content-area rounded-b-2xl border border-solid border-theme-border md:p-8 xl:p-16 min-h-screen">
                                                 <div className='email-postdata bg-white'>
-                                                    {/* <div className="email-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} /> */}
-                                                    <iframe
+                                                    <div className="email-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
+                                                    {/* <iframe
                                                         srcDoc={post.content}
                                                         className="w-full border"
                                                         title="Email Content"
-                                                    />
+                                                    /> */}
                                                 </div>
                                                 <CodeView content={post.content} />
                                             </div>
@@ -237,22 +241,6 @@ export default async function PostDetail({ params }) {
                                                     </h1>
                                                 </div>
                                             )}
-
-
-                                            {/* <div className="flex items-center space-x-4">
-                                            <div className="w-20 md:w-24 h-20 md:h-24 rounded-full overflow-hidden border border-solid border-theme-border flex items-center justify-center">
-                                                {brandData.brands.nodes[0]?.featuredImage?.node?.sourceUrl && (
-                                                    <Image
-                                                        src={brandData.brands.nodes[0].featuredImage.node.sourceUrl}
-                                                        alt={brandData.brands.nodes[0].title}
-                                                        width={96}
-                                                        height={96}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                )}
-                                            </div>
-                                            <h1 className="text-2xl font-bold">{brandData.brands.nodes[0]?.title}</h1>
-                                        </div> */}
 
                                             <div>
                                                 <h3 className="text-base font-intersemi font-semibold pb-1">Subject lines:</h3>
@@ -297,27 +285,27 @@ export default async function PostDetail({ params }) {
                         </main>
                     </CategoryeScript>
 
-                    <div className='py-10 md:pb-24 related-category-post xl:px-4'>
+                    <div className='py-10 md:pb-24 md:pt-1 related-category-post xl:px-4'>
                         <div className="container">
-                            <h2 className="text-center pb-6 md:mb-12">Maybe you'll also like…</h2>
+                            <h2 className="text-center mb-6 md:mb-10">Maybe you'll also like…</h2>
                             <div className="flex flex-wrap justify-center gap-2 md:gap-3">
                                 <div className="flex flex-wrap justify-center gap-2 mt-2">
                                     {post.emailTypes.nodes.map((tag, index) => (
-                                        <Link href={`/email-type/${tag.slug}`} key={index} className="text-sm md:text-base block leading-4 bg-white text-theme-dark hover:bg-theme-blue hover:text-white px-4 md:px-4 py-2 md:py-2 rounded-3xl font-normal">
+                                        <Link href={`/email-type/${tag.slug}`} key={index} className="text-sm md:text-base block leading-4 bg-white text-theme-dark hover:bg-theme-blue hover:text-white px-4 md:px-4 py-2 md:py-2 rounded-3xl font-medium">
                                             {tag.name}
                                         </Link>
                                     ))}
 
                                     {post.industries.nodes.length > 0 && (
                                         post.industries.nodes.map((industry, index) => (
-                                            <Link href={`/industry/${industry.slug}`} key={index} className="text-sm md:text-base block leading-4 bg-white text-theme-dark hover:bg-theme-blue hover:text-white px-4 md:px-4 py-2 md:py-2 rounded-3xl font-normal">
+                                            <Link href={`/industry/${industry.slug}`} key={index} className="text-sm md:text-base block leading-4 bg-white text-theme-dark hover:bg-theme-blue hover:text-white px-4 md:px-4 py-2 md:py-2 rounded-3xl font-medium">
                                                 {industry.name}
                                             </Link>
                                         ))
                                     )}
                                     {post.seasonals.nodes.length > 0 && (
                                         post.seasonals.nodes.map((seasonal, index) => (
-                                            <Link href={`/seasonal/${seasonal.slug}`} key={index} className="text-sm md:text-base block leading-4 bg-white text-theme-dark hover:bg-theme-blue hover:text-white px-4 md:px-4 py-2 md:py-2 rounded-3xl font-normal">
+                                            <Link href={`/seasonal/${seasonal.slug}`} key={index} className="text-sm md:text-base block leading-4 bg-white text-theme-dark hover:bg-theme-blue hover:text-white px-4 md:px-4 py-2 md:py-2 rounded-3xl font-medium">
                                                 {seasonal.name}
                                             </Link>
                                         ))
@@ -329,7 +317,7 @@ export default async function PostDetail({ params }) {
                                 <RecentPostData />
                             </div>
                             <div className='text-center mt-12'>
-                                <Link href="/categories" className="inline-block bg-theme-blue text-white  hover:bg-theme-dark font-semibold px-1 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap border-none text-sm md:text-base">Explore All Email Templetes</Link>
+                                <Link href="/categories" className="inline-block bg-theme-blue text-white  hover:bg-theme-dark font-semibold px-1 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap border-none text-sm md:text-base w-full md:w-auto">Explore All Email Templetes</Link>
                             </div>
                         </div>
                     </div>

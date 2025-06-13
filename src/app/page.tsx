@@ -141,7 +141,7 @@ export default async function Home() {
       <>
         <HeroSection />
 
-        <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-6">
+        <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-5">
           <InfiniteScrollTemplates
             initialTemplates={data.posts.nodes}
             hasNextPage={data.posts.pageInfo.hasNextPage}

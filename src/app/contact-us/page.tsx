@@ -103,11 +103,11 @@ export default async function ContactUs() {
 
     return (
         <>
-            <div className="mb-4 mt-8 lg:my-24">
+            <div className="mb-16 mt-8 lg:mt-24 lg:mb-10">
                 <div className="container">
                     <div className="flex flex-wrap">
                         <div className="w-full lg:w-3/5 contact-form pb-12 lg:pb-0">
-                            <div className="bg-gradient-to-b from-[#E9EFE9] rounded-3xl py-6 px-4 lg:p-12 pb-12 md:pb-0">
+                            <div className="bg-gradient-to-b from-[#E9EFE9] rounded-3xl py-6 px-4 pb-12 md:pb-0 lg:px-12 lg:pt-12  ">
                                 {contactData.formTitle && <h1 className="h2 text-center mb-6" dangerouslySetInnerHTML={{ __html: contactData.formTitle }}></h1>}
                                 {contactData.formContent && <div className="text-base md:text-1xl text-center mb-8" dangerouslySetInnerHTML={{ __html: contactData.formContent }}></div>}
                                 <ContactForm />
@@ -151,7 +151,7 @@ export default async function ContactUs() {
                                                     />
                                                 </span>
                                             </div>
-                                            <span>
+                                            <span className="pt-0.5">
                                                 <a
                                                     className="text-base md:text-lg hover:underline"
                                                     href={contactData.email.emailLink?.url}

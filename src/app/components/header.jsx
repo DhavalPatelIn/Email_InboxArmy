@@ -12,8 +12,9 @@ export default async function Header() {
     return (
         <>
             <HeaderClientWrapper>
-                <header className="top-header fixed top-0 left-0 z-50 bg-white w-full px-4 xl:px-12 py-3 xl:py-0 border-b xl:border-none border-solid border-theme-border">
-                    <div className="flex items-center">
+                <header className="top-header fixed top-0 left-0 z-50  w-full px-4 xl:px-12 py-3 xl:py-0 border-b xl:border-none border-solid border-theme-border">
+                    <span className='header-bg absolute top-0 left-0 w-full h-full z-10'></span>
+                    <div className="flex items-center relative z-10">
                         <div className="left-wrap flex items-center justify-between xl:justify-start w-full xl:w-auto">
                             {/* Logo */}
                             <div className="left-logo">
@@ -40,7 +41,7 @@ export default async function Header() {
                                 </Link>
                             </div>
                             {/* Navigation */}
-                            <nav className='top-nav xl:pl-2'>
+                            <nav className='top-nav xl:pl-9'>
                                 <input className='toggle-menu block xl:hidden' type="checkbox" />
                                 <span className='menu-toggle'>
                                     <span className='bg-theme-dark'></span>
@@ -50,7 +51,7 @@ export default async function Header() {
                                 <div className='min-menu text-center xl:text-left'>
                                     <ul className="block xl:flex pt-4 xl:pt-0 pb-10 xl:pb-0">
                                         <li className="group submenu">
-                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-9 text-theme-dark hover:text-theme-blue" href={'/categories'}>
+                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-7 text-theme-dark hover:text-theme-blue" href={'/categories'}>
                                                 Categories
                                             </Link>
                                             <input className='category-menu absolute top-3 left-32 right-0 m-auto w-6 h-6 z-30 cursor-pointer block xl:hidden opacity-0' type="checkbox" />
@@ -110,17 +111,17 @@ export default async function Header() {
                                         </li>
 
                                         <li>
-                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-9 text-theme-dark hover:text-theme-blue" href={'/brands'}>
+                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-7 text-theme-dark hover:text-theme-blue" href={'/brands'}>
                                                 Brands
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-9 text-theme-dark hover:text-theme-blue" href={'/about-us'}>
+                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-7 text-theme-dark hover:text-theme-blue" href={'/about-us'}>
                                                 About
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-9 text-theme-dark hover:text-theme-blue" href={'/contact-us'}>
+                                            <Link className="text-lg md:text-base font-semibold md:font-medium block px-7 py-3 xl:py-7 text-theme-dark hover:text-theme-blue" href={'/contact-us'}>
                                                 Contact Us
                                             </Link>
                                         </li>
@@ -129,8 +130,8 @@ export default async function Header() {
                             </nav>
                         </div>
                         <div className="ml-auto">
-                            <input className='search-input h-5 w-5 z-10 absolute top-5 right-16 md:right-24 block xl:hidden cursor-pointer opacity-0' type="checkbox" name='Search' />
-                            <span className="search-toggle absolute top-5 right-16 md:right-24 block xl:hidden">
+                            <input className='search-input h-5 w-5 z-10 absolute top-3 -mt-1 right-12 block xl:hidden cursor-pointer opacity-0' type="checkbox" name='Search' />
+                            <span className="search-toggle absolute top-3 -mt-1 right-12 block xl:hidden">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M19 19L15.5001 15.5M18 9.5C18 14.1944 14.1944 18 9.5 18C4.80558 18 1 14.1944 1 9.5C1 4.80558 4.80558 1 9.5 1C14.1944 1 18 4.80558 18 9.5Z" stroke="#362C22" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>

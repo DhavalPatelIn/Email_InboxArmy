@@ -285,16 +285,25 @@ textarea {
   border: none
 }
 
-/* Header */
-.top-header {
-  background-color: #fff;
+.banner-search .search-row {
+  background-color: var(--theme-light-gold);
 }
 
-.sticky-header {
-  background: #1B2005;
-  background: linear-gradient(90deg, rgba(27, 32, 5, 1) 0%, rgba(46, 59, 0, 1) 100%);
+/* Header */
+/* .top-header {
+  background-color: #fff;
+} */
+
+.header-bg {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
+  opacity: 0 !important;
+}
+
+.sticky-header .header-bg {
+  opacity: 1 !important;
+  background: #1B2005;
+  background: linear-gradient(90deg, rgba(27, 32, 5, 1) 0%, rgba(46, 59, 0, 1) 100%);
 }
 
 .sticky-header .left-logo .logo-txt {
@@ -338,7 +347,7 @@ textarea {
 }
 
 .inboxarmy-ads {
-  background: radial-gradient(circle at 170px 600px, #1B2005 0%, #2E3B00 60%);
+  background: radial-gradient(circle at 170px 600px, #2E3B00 0%, #1B2005 60%);
 }
 
 .catagery-data span {
@@ -355,7 +364,23 @@ textarea {
   padding-right: 50px;
 }
 
+.search-row input:placeholder {
+  color: var(--theme-text-2);
+}
 
+
+
+
+
+@media(min-width: 1280px) {
+  .page-home .top-header .search-row {
+    display: none;
+  }
+
+  .page-home .sticky-header.top-header .search-row {
+    display: block;
+  }
+}
 
 @media(max-width: 1279px) {
   .sticky-header.top-header {
@@ -541,6 +566,14 @@ textarea {
     margin-bottom: 10px;
   }
 
+  .ads-logo img {
+    max-width: 120px;
+  }
+
+  .top-header {
+    background: #fff;
+  }
+
 
 }
 
@@ -563,6 +596,10 @@ textarea {
   .agency-box .info-text {
     margin: 8px 0;
     width: 100%;
+  }
+
+  .ads-logo img {
+    max-width: 82px;
   }
 }
 

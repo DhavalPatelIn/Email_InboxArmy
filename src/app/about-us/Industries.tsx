@@ -48,7 +48,7 @@ export default async function Industries() {
                         {industriesData?.map((item: IndustriesImage, index: number) => (
                             <div key={index} className="cardwrap shadow-custom flex flex-col items-center bg-white rounded-full p-6 w-36 h-36 md:w-40 md:h-40 xl:w-36 2xl:w-[154px] xl:h-36 2xl:h-[154px] justify-center">
                                 <div className='image-row m-0 w-12 md:w-auto'>
-                                    <Image src={item.image.node.sourceUrl} height={61} width={55} alt={item.image.node.altText} />
+                                    <Image className='block m-auto' src={item.image.node.sourceUrl} height={61} width={55} alt={item.image.node.altText} />
                                 </div>
                                 <span className="text-base block text-center mt-4" dangerouslySetInnerHTML={{ __html: item.title }} />
                             </div>

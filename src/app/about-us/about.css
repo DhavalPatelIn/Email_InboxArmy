@@ -1,5 +1,9 @@
-.top-header {
+.page-about-us .top-header {
     background: transparent;
+}
+
+.page-about-us .search-row input {
+    background-color: #ffffff;
 }
 
 .top-header.sticky-header {

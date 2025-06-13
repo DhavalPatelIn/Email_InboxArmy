@@ -60,9 +60,9 @@ function AdCard({ adBox }: { adBox: AdBox }) {
             target={adBox.cta?.target || "_self"}
             className="inboxarmy-ads relative w-full bg-theme-dark text-white text-center shadow-custom rounded-xl border border-solid border-theme-border flex items-center justify-start"
         >
-            <div className="relative pb-16 md:pb-20 2xl:pb-16 w-full">
+            <div className="ads-logo relative pb-16 md:pb-20 2xl:pb-16 w-full">
                 <Image
-                    className="block m-auto max-[20] md:max-w-full"
+                    className="block m-auto"
                     src={adBox.icon?.node?.sourceUrl || '/default-logo.svg'}
                     width={280}
                     height={480}

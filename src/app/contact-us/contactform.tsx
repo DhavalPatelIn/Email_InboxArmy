@@ -323,6 +323,8 @@ export const ContactForm = () => {
                         placeholder="Services Interested*"
                         showCheckbox={true}
                         closeIcon="cancel"
+                        closeOnSelect={false}
+                        onSearch={() => { }}
                         style={{
                             chips: {
                                 background: '#2e3b00',
@@ -359,7 +361,7 @@ export const ContactForm = () => {
                     placeholder="Type your message..."
                     rows={4}
                     className="rounded-lg px-4 py-3 bg-theme-light-gray 
-                    focus:outline-none focus:ring-2 focus:ring-theme-blue w-full mb-4 resize-none"
+                    focus:outline-none w-full mb-4 resize-none"
                 />
                 <div className="flex items-center justify-center mb-6 newsletter-checkbox">
                     <div className='relative'>

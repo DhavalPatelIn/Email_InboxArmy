@@ -61,7 +61,7 @@ export default function BrandsSearch({ brands, brandCategories }: BrandsSearchPr
         <>
             <div className="container">
                 <div className='lg:px-20 md:pt-6 md:pb-1'>
-                    <div className="bg-gradient-to-r from-[#E9EFE9] to-[#DEE5C5] rounded-2xl lg:rounded-3xl pb-0 p-4 lg:p-6 lg:px-8 flex flex-wrap items-center justify-between">
+                    <div className="bg-gradient-to-r from-[#E9EFE9] to-[#DEE5C5] rounded-2xl lg:rounded-3xl pb-0 p-4 md:p-6 md:px-8 flex flex-wrap items-center justify-between">
                         <div className="w-full md:w-7/12 search-row lg:pr-10">
                             <div className='flex w-full flex-wrap items-center bg-theme-light-gray rounded-xl py-1.5 md:py-1 relative'>
                                 <input
@@ -79,13 +79,13 @@ export default function BrandsSearch({ brands, brandCategories }: BrandsSearchPr
 
                         <div className='w-full md:w-5/12'>
                             <div className='flex justify-center md:justify-end'>
-                                <div className='w-full max-w-[210px] md:max-w-[210px]'>
+                                <div className='w-full md:w-[180px]'>
                                     <select
                                         value={selectedCategory}
                                         onChange={handleCategoryChange}
                                         className='w-full cursor-pointer text-base font-medium bg-transparent border-none px-2 py-3 md:py-6 pr-4'
                                     >
-                                        <option value="">All Categories</option>
+                                        <option value="">Brands by Category</option>
                                         {brandCategories.map((category) => (
                                             <option key={category.slug} value={category.slug}>{category.name}</option>
                                         ))}

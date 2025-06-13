@@ -3,6 +3,8 @@ import { gql } from '@apollo/client'
 
 import HeaderSearch from "./HeaderSearch";
 
+
+
 interface HomePageData {
     title: string;
     heading: string;
@@ -53,7 +55,7 @@ export default async function HeroSection() {
                     <p className="p2 w-full max-w-xl m-auto pt-2 text-theme-text-2">
                         {heroData?.content}
                     </p>
-                    <div className="w-full max-w-3xl m-auto md:px-6 mt-8">
+                    <div className="w-full max-w-3xl m-auto md:px-6 mt-8 banner-search">
                         <HeaderSearch />
                     </div>
                 </div>

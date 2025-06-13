@@ -8,6 +8,9 @@ import GlobalLoader from './components/GlobalLoader';
 import Script from 'next/script';
 import { client } from './lib/apollo-client';
 import { gql } from '@apollo/client';
+import BodyClassHandler from './components/BodyClassHandler';
+
+
 
 const GET_HOME_PAGE_DATA = gql`
 query HomePage {
@@ -43,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -51,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-
+        <BodyClassHandler />
         <GlobalLoader />
         <Header />
         {children}

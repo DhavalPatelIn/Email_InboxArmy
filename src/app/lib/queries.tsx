@@ -140,6 +140,25 @@ export async function getBrandsData() {
   };
 }
 
+export const GET_BRAND_PAGE_QUERY = gql`
+query BrandPage {
+  pages {
+    nodes {
+      brandPage {
+        brandTitle
+        brandText
+      }
+    }
+  }
+}
+`;
+export async function getBrandPageData() {
+  const { data } = await client.query({ query: GET_BRAND_PAGE_QUERY });
+  return {
+    brandPage: data?.pages?.nodes?.[0]?.brandPage ?? [],
+  };
+}
+
 
 export const GET_BRAND_CATEGORIES_QUERY = gql`
 query BrandsData {
