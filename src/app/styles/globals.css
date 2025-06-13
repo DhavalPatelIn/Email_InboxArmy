@@ -297,11 +297,11 @@ textarea {
 .header-bg {
   -webkit-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  opacity: 0 !important;
+  opacity: 0;
 }
 
 .sticky-header .header-bg {
-  opacity: 1 !important;
+  opacity: 1;
   background: #1B2005;
   background: linear-gradient(90deg, rgba(27, 32, 5, 1) 0%, rgba(46, 59, 0, 1) 100%);
 }
@@ -362,6 +362,7 @@ textarea {
 /* Search */
 .search-row input {
   padding-right: 50px;
+  color: var(--theme-text-2);
 }
 
 .search-row input:placeholder {

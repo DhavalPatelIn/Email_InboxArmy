@@ -8,7 +8,7 @@ export default function HeaderClientWrapper({ children }: { children: React.Reac
         const handleScroll = () => {
             if (!header) return;
 
-            if (window.scrollY > 100) {
+            if (window.scrollY > 50) {
                 header.classList.add('sticky-header');
             } else {
                 header.classList.remove('sticky-header');

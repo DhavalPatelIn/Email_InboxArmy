@@ -79,7 +79,7 @@ export default function BrandsSearch({ brands, brandCategories }: BrandsSearchPr
 
                         <div className='w-full md:w-5/12'>
                             <div className='flex justify-center md:justify-end'>
-                                <div className='w-full md:w-[180px]'>
+                                <div className='w-full md:w-[205px]'>
                                     <select
                                         value={selectedCategory}
                                         onChange={handleCategoryChange}
