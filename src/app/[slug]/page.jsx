@@ -12,6 +12,7 @@ import DateIcon from '../images/date-icon.svg';
 import Link from 'next/link';
 import RecentPostData from './RecentPostData';
 import MarketingAgency from 'app/components/MarketingAgency';
+import EmailShadowPreview from './ShowEmail';
 
 const POST_QUERY = gql`
   query GetPost($slug: ID!) {
@@ -204,7 +205,8 @@ export default async function PostDetail({ params }) {
 
                                             <div className="email-content-area rounded-b-2xl border border-solid border-theme-border md:p-8 xl:p-16 min-h-screen">
                                                 <div className='email-postdata bg-white'>
-                                                    <div className="email-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
+                                                    <EmailShadowPreview html={post.content} />
+                                                    {/* <div className="email-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} /> */}
                                                     {/* <iframe
                                                         srcDoc={post.content}
                                                         className="w-full border"
