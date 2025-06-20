@@ -33,7 +33,7 @@ export default function EmailCard({
 }: EmailCardProps) {
     return (
         <Link href={`/${slug}`} className="email-link w-full bg-white shadow-custom rounded-md md:rounded-xl border border-solid border-theme-border overflow-hidden">
-            <div className="email-image relative py-36 sm:py-32 md:py-40 2xl:py-60 w-full overflow-hidden">
+            <div className="email-image relative py-36 sm:py-32 md:py-40 2xl:py-56 w-full overflow-hidden">
                 {image && (
                     <Image className="absolute left-0 right-0 w-full" src={image} width={280} height={480} alt={title} />
                 )}
