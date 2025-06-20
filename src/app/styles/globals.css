@@ -328,6 +328,9 @@ textarea {
   -webkit-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
+.email-image {
+  padding-bottom: 170%;
+}
 
 /* .email-link:hover .email-image img {
   top: 100%;
