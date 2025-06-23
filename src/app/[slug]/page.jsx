@@ -66,34 +66,120 @@ const POST_QUERY = gql`
   }
 `;
 
+// Alternative query using posts with name filter
+const POSTS_QUERY = gql`
+  query GetPosts($slug: String!) {
+    posts(where: { name: $slug }, first: 1) {
+      nodes {
+        title
+        content(format: RENDERED)
+        date
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        emailTypes(first: 30) {
+          nodes {
+            id
+            name
+            slug
+          }
+        }
+        industries(first: 30) {
+          nodes {
+            id
+            name
+            slug
+          }
+        }
+        seasonals(first: 30) {
+          nodes {
+            id
+            name
+            slug
+          }
+        }
+        brandposts {
+          brand {
+              nodes {
+              ... on Brand {
+                  id
+                  title
+                  featuredImage {
+                  node {
+                      sourceUrl
+                  }
+                  }
+              }
+              }
+          }
+        }
+      }
+    }
+  }
+`;
 
 // Memoize the metadata generation
 export async function generateMetadata({ params }) {
 
     try {
+        const awaitedParams = await params;
         let decodedSlug;
         try {
-            decodedSlug = decodeURIComponent(params.slug);
+            decodedSlug = decodeURIComponent(awaitedParams.slug);
         } catch (error) {
-            decodedSlug = params.slug; // fallback to original slug if decoding fails
+            decodedSlug = awaitedParams.slug; // fallback to original slug if decoding fails
         }
 
-        const { data } = await client.query({
-            query: POST_QUERY,
-            variables: { slug: decodedSlug },
-        });
+        let data;
+        let post = null;
 
+        // Try the original post query first
+        try {
+            const response = await client.query({
+                query: POST_QUERY,
+                variables: { slug: decodedSlug },
+            });
+            data = response.data;
+            if (data.post) {
+                post = data.post;
+            }
+        } catch (graphqlError) {
+            // Try the alternative posts query
+            try {
+                const response2 = await client.query({
+                    query: POSTS_QUERY,
+                    variables: { slug: decodedSlug },
+                });
+                data = response2.data;
+                if (data.posts && data.posts.nodes && data.posts.nodes.length > 0) {
+                    post = data.posts.nodes[0];
+                }
+            } catch (graphqlError2) {
+                // Both queries failed, but don't throw error here
+                console.log('Both queries failed in generateMetadata');
+            }
+        }
 
-        if (!data.post) {
+        // Check if post exists and has required data
+        if (!post || !post.title) {
             return {
                 title: 'Post Not Found',
             };
         }
 
+        // Additional validation for required fields
+        if (typeof post.title !== 'string' || post.title.trim() === '') {
+            return {
+                title: 'Post Not Found',
+            };
+        }
 
         return {
-            title: data.post.title,
-            description: data.post.content?.slice(0, 160),
+            title: post.title,
+            description: post.content?.slice(0, 160),
         };
     } catch (error) {
         return {
@@ -105,32 +191,85 @@ export async function generateMetadata({ params }) {
 export default async function PostDetail({ params }) {
 
     try {
+        const awaitedParams = await params;
         let decodedSlug;
         try {
-            decodedSlug = decodeURIComponent(params.slug);
+            decodedSlug = decodeURIComponent(awaitedParams.slug);
         } catch (error) {
-            decodedSlug = params.slug; // fallback to original slug if decoding fails
+            decodedSlug = awaitedParams.slug; // fallback to original slug if decoding fails
         }
 
-        const { data } = await client.query({
-            query: POST_QUERY,
-            variables: { slug: decodedSlug },
+        console.log('Attempting to fetch post with slug:', decodedSlug);
 
-        });
+        let data;
+        let post = null;
 
+        // Try the original post query first
+        try {
+            console.log('Trying original post query...');
+            const response = await client.query({
+                query: POST_QUERY,
+                variables: { slug: decodedSlug },
+            });
+            data = response.data;
+            console.log('Original query response:', data);
+            if (data.post) {
+                post = data.post;
+                console.log('Found post with original query:', post.title);
+            } else {
+                console.log('No post found with original query');
+            }
+        } catch (graphqlError) {
+            console.log('Original post query failed, trying alternative...');
+            console.error('GraphQL error:', graphqlError);
 
+            // Try the alternative posts query
+            try {
+                console.log('Trying alternative posts query...');
+                const response2 = await client.query({
+                    query: POSTS_QUERY,
+                    variables: { slug: decodedSlug },
+                });
+                data = response2.data;
+                console.log('Alternative query response:', data);
+                if (data.posts && data.posts.nodes && data.posts.nodes.length > 0) {
+                    post = data.posts.nodes[0];
+                    console.log('Found post with alternative query:', post.title);
+                } else {
+                    console.log('No posts found with alternative query');
+                }
+            } catch (graphqlError2) {
+                console.error('Alternative query also failed:', graphqlError2);
+                // Don't throw error here, just log it and continue
+                console.log('Both queries failed, will redirect to 404');
+            }
+        }
 
-        if (!data.post) {
+        console.log('Final post data:', post);
+
+        // Check if post exists and has required data
+        if (!post || !post.title || !post.content) {
+            console.log('Post not found or invalid for slug:', decodedSlug);
             notFound();
         }
 
-        const { post } = data;
+        // Additional validation for required fields
+        if (typeof post.title !== 'string' || post.title.trim() === '') {
+            console.log('Post title is empty or invalid for slug:', decodedSlug);
+            notFound();
+        }
+
+        if (typeof post.content !== 'string' || post.content.trim() === '') {
+            console.log('Post content is empty or invalid for slug:', decodedSlug);
+            notFound();
+        }
+
         const formattedDate = format(new Date(post.date), "MMMM d, yyyy h:mmaaa").toLowerCase();
 
         return (
             <>
                 <BodyClassHandler classname='page-category-detail' />
-                <span className='absolute top-0 left-0 w-full h-[100px] bg-theme-light-gray z-10'></span>
+                <span className='absolute top-0 left-0 w-full h-[100px] bg-theme-light-gray z-10 hidden xl:block'></span>
                 <div className='bg-theme-light-gray'>
 
                     <CategoryeScript>
@@ -346,12 +485,7 @@ export default async function PostDetail({ params }) {
         );
     } catch (error) {
         console.error('Error fetching post:', error);
-        return (
-            <div className="max-w-4xl mx-auto px-4 py-8">
-                <h1 className="text-2xl font-bold text-red-600">
-                    Error loading post content
-                </h1>
-            </div>
-        );
+        // Instead of showing an error page, redirect to 404
+        notFound();
     }
 }

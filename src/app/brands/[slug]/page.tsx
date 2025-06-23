@@ -84,9 +84,16 @@ const GET_BRAND_AND_POSTS_QUERY = gql`
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
 
   const resolvedParams = await params;
+  let decodedSlug: string;
+  try {
+    decodedSlug = decodeURIComponent(resolvedParams.slug as string);
+  } catch {
+    decodedSlug = resolvedParams.slug as string;
+  }
+
   const { data } = await client.query({
     query: GET_BRAND_AND_POSTS_QUERY,
-    variables: { slug: resolvedParams.slug },
+    variables: { slug: decodedSlug },
   });
 
   const seo = data?.brand?.seo;
@@ -98,13 +105,19 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function BrandDetail({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
+  let decodedSlug: string;
+  try {
+    decodedSlug = decodeURIComponent(resolvedParams.slug as string);
+  } catch {
+    decodedSlug = resolvedParams.slug as string;
+  }
 
   try {
     // Execute the GraphQL query to get brand and posts
     const { data } = await client.query({
       query: GET_BRAND_AND_POSTS_QUERY,
       variables: {
-        slug: resolvedParams.slug,
+        slug: decodedSlug,
       },
     });
 
@@ -115,7 +128,7 @@ export default async function BrandDetail({ params }: { params: Promise<Params> 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const brandPosts = allPosts.filter((post: any) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      post.brandposts?.brand?.nodes?.some((brand: any) => brand.slug === resolvedParams.slug)
+      post.brandposts?.brand?.nodes?.some((brand: any) => brand.slug === decodedSlug)
     );
 
     // Get ad boxes data

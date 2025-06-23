@@ -3,7 +3,61 @@ import { client } from './apollo-client';
 
 export const SEARCH_POSTS = gql`  
   query SearchQuery($search: String!) {
-    posts(where: { search: $search }) {
+    posts(
+      where: { 
+        search: $search,
+        orderby: { field: DATE, order: DESC }
+      },
+      first: 50
+    ) {
+      nodes {
+        id
+        title
+        slug
+        excerpt
+        date
+        featuredImage {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        emailTypes {
+          nodes {
+            name
+            slug
+          }
+        }
+        industries {
+          nodes {
+            name
+            slug
+          }
+        }
+        seasonals {
+          nodes {
+            name
+            slug
+          }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+`;
+
+// Alternative search query that might work better
+export const SEARCH_POSTS_ALT = gql`  
+  query SearchQueryAlt($search: String!) {
+    posts(
+      where: { 
+        search: $search
+      },
+      first: 50
+    ) {
       nodes {
         id
         title
@@ -32,9 +86,42 @@ export const SEARCH_POSTS = gql`
           }
         }
       }
-      pageInfo {
-        hasNextPage
-        endCursor
+    }
+  }
+`;
+
+// Simple search query that might work better
+export const SIMPLE_SEARCH_POSTS = gql`  
+  query SimpleSearchQuery($search: String!) {
+    posts(
+      where: { 
+        search: $search
+      }
+    ) {
+      nodes {
+        id
+        title
+        slug
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+        emailTypes {
+          nodes {
+            name
+          }
+        }
+        industries {
+          nodes {
+            name
+          }
+        }
+        seasonals {
+          nodes {
+            name
+          }
+        }
       }
     }
   }

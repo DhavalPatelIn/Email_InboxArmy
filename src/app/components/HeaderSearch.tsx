@@ -13,7 +13,13 @@ export default function HeaderSearch() {
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (!keyword.trim()) return;
-        router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
+
+        console.log('Search form submitted with keyword:', keyword); // Debug log
+
+        const searchUrl = `/search?keyword=${encodeURIComponent(keyword)}`;
+        console.log('Navigating to:', searchUrl); // Debug log
+
+        router.push(searchUrl);
         setKeyword('');
     };
 

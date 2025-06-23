@@ -4,6 +4,8 @@ import InfiniteScrollTemplates from './components/InfiniteScrollTemplates';
 import HeroSection from "./components/HeroBanner";
 import { getBrandData } from './lib/queries';
 import { Metadata } from 'next';
+import Link from 'next/link';
+
 interface EmailTemplateData {
   posts: {
     nodes: {
@@ -112,21 +114,34 @@ const EMAIL_TEMPLATES_QUERY = gql`
 `;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { data } = await client.query({
-    query: GET_HOME_PAGE_DATA,
-  });
+  try {
+    const { data } = await client.query({
+      query: GET_HOME_PAGE_DATA,
+    });
 
-  const seo = data?.page?.seo;
+    const seo = data?.page?.seo;
 
-  return {
-    title: seo?.title || 'Home',
-    description: seo?.metaDesc || '',
-    openGraph: {
-      title: seo?.opengraphTitle || seo?.title || 'Home',
-      description: seo?.opengraphDescription || seo?.metaDesc || '',
-      images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
-    },
-  };
+    return {
+      title: seo?.title || 'InboxArmy - Email Marketing Templates',
+      description: seo?.metaDesc || 'Discover professional email marketing templates for your business. Browse our collection of industry-specific email templates.',
+      openGraph: {
+        title: seo?.opengraphTitle || seo?.title || 'InboxArmy - Email Marketing Templates',
+        description: seo?.opengraphDescription || seo?.metaDesc || 'Discover professional email marketing templates for your business.',
+        images: seo?.opengraphImage?.sourceUrl ? [seo.opengraphImage.sourceUrl] : [],
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    // Return fallback metadata if GraphQL fails
+    return {
+      title: 'InboxArmy - Email Marketing Templates',
+      description: 'Discover professional email marketing templates for your business. Browse our collection of industry-specific email templates.',
+      openGraph: {
+        title: 'InboxArmy - Email Marketing Templates',
+        description: 'Discover professional email marketing templates for your business.',
+      },
+    };
+  }
 }
 
 export default async function Home() {
@@ -153,6 +168,21 @@ export default async function Home() {
     );
   } catch (error) {
     console.error('Error fetching home page data:', error);
-    return <div>Error loading content.</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Welcome to InboxArmy</h1>
+          <p className="text-gray-600 mb-6">We&apos;re experiencing some technical difficulties. Please try again later.</p>
+          <div className="space-y-4">
+            <Link href="/search" className="block bg-theme-blue text-white px-6 py-3 rounded-lg hover:bg-theme-dark">
+              Search Templates
+            </Link>
+            <Link href="/categories" className="block bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300">
+              Browse Categories
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 }

@@ -8,7 +8,20 @@ import DownArrow from '../images/down-arrow.svg'
 import Image from 'next/image';
 
 export default async function Header() {
-    const { emailTypes, seasonals, industries } = await postdata();
+    let emailTypes = [];
+    let seasonals = [];
+    let industries = [];
+
+    try {
+        const data = await postdata();
+        emailTypes = data.emailTypes || [];
+        seasonals = data.seasonals || [];
+        industries = data.industries || [];
+    } catch (error) {
+        console.error('Error fetching header data:', error);
+        // Use empty arrays as fallback
+    }
+
     return (
         <>
             <HeaderClientWrapper>

@@ -72,10 +72,17 @@ const GET_INDUSTRY_WITH_POSTS = gql`
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
 
   const resolvedParams = await params;
+  let decodedSlug: string;
+  try {
+    decodedSlug = decodeURIComponent(resolvedParams.slug as string);
+  } catch {
+    decodedSlug = resolvedParams.slug as string;
+  }
+
   const { data } = await client.query({
     query: GET_INDUSTRY_SEO_BY_SLUG,
     variables: {
-      slug: [resolvedParams.slug],
+      slug: [decodedSlug],
     },
   });
 
@@ -94,10 +101,17 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 
 export default async function IndustryPage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
+  let decodedSlug: string;
+  try {
+    decodedSlug = decodeURIComponent(resolvedParams.slug as string);
+  } catch {
+    decodedSlug = resolvedParams.slug as string;
+  }
+
   const { data } = await client.query({
     query: GET_INDUSTRY_WITH_POSTS,
     variables: {
-      slug: [resolvedParams.slug], // pass slug as array
+      slug: [decodedSlug], // pass slug as array
     },
   });
 
