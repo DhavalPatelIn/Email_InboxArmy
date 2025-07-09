@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import EmailCard from "./EmailCard";
 import { useInView } from 'react-intersection-observer';
 import Image from "next/image";
@@ -50,6 +50,7 @@ interface InfiniteScrollTemplatesProps {
     hasNextPage: boolean;
     endCursor: string;
     adBoxes: AdBox[];
+    activeTagSlug?: string;
 }
 
 // AdCard component for rendering individual ads
@@ -69,12 +70,14 @@ function AdCard({ adBox }: { adBox: AdBox }) {
                     alt="Brand Logo"
                 />
                 <div className="px-4 2xl:px-6 mt-12 md:mt-8 2xl:mt-16">
-                    <p className="h3 text-white 2xl:mb-2">{adBox.title}</p>
+                    <div className=" 2xl:mb-2">
+                        <p className="content-text h3 text-white" dangerouslySetInnerHTML={{ __html: adBox.title }}></p>
+                    </div>
                 </div>
             </div>
 
-            <div className="absolute left-4 right-4 bottom-6 md:bottom-4 2xl:left-8 2xl:right-8 2xl:bottom-8">
-                <span className="block bg-theme-blue text-white hover:bg-white hover:text-theme-dark font-semibold px-1 md:px-5 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-sm md:text-base">
+            <div className="absolute left-3 right-3 bottom-6 md:bottom-4 2xl:left-7 2xl:right-7 2xl:bottom-8">
+                <span className="block bg-theme-blue text-white hover:bg-white hover:text-theme-dark font-semibold px-1 py-3 md:py-4 rounded-lg whitespace-nowrap border-none uppercase text-xs md:text-base">
                     {adBox.cta?.title || 'Explore More'}
                 </span>
             </div>
@@ -86,7 +89,8 @@ export default function InfiniteScrollTemplates({
     initialTemplates,
     hasNextPage: initialHasNextPage,
     endCursor: initialEndCursor,
-    adBoxes
+    adBoxes,
+    activeTagSlug
 }: InfiniteScrollTemplatesProps) {
     const [templates, setTemplates] = useState<Template[]>(initialTemplates);
     const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
@@ -98,42 +102,42 @@ export default function InfiniteScrollTemplates({
         rootMargin: '100px',
     });
 
-    useEffect(() => {
-        const loadMoreTemplates = async () => {
-            if (inView && hasNextPage && !isLoading) {
-                setIsLoading(true);
-                try {
-                    const response = await fetch('/api/templates', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            after: endCursor,
-                        }),
-                    });
+    const loadMoreTemplates = useCallback(async () => {
+        if (inView) {
+            setIsLoading(true);
+            try {
+                const response = await fetch('/api/templates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        after: endCursor,
+                    }),
+                });
 
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                    if (data.posts) {
-                        setTemplates(prev => [...prev, ...data.posts.nodes]);
-                        setHasNextPage(data.posts.pageInfo.hasNextPage);
-                        setEndCursor(data.posts.pageInfo.endCursor);
-                    }
-                } catch (error) {
-                    console.error('Error loading more templates:', error);
-                } finally {
-                    setIsLoading(false);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            }
-        };
 
+                const data = await response.json();
+
+                if (data.posts) {
+                    setTemplates(prev => [...prev, ...data.posts.nodes]);
+                    setHasNextPage(data.posts.pageInfo.hasNextPage);
+                    setEndCursor(data.posts.pageInfo.endCursor);
+                }
+            } catch (error) {
+                console.error('Error loading more templates:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    }, [inView]);
+
+    useEffect(() => {
         loadMoreTemplates();
-    }, [inView, hasNextPage, endCursor, isLoading]);
+    }, [loadMoreTemplates]);
 
     // Function to render items with ads at specific positions: 6, 12, 24, 36, 48, etc.
     const renderItemsWithAds = () => {
@@ -152,6 +156,7 @@ export default function InfiniteScrollTemplates({
                         industries: { nodes: { name: string }[] };
                         seasonals: { nodes: { name: string }[] };
                     }}
+                    activeTagSlug={activeTagSlug}
                 />
             );
 

@@ -1,11 +1,14 @@
 import { client } from '../../lib/apollo-client';
 import { gql } from '@apollo/client'
 import InfiniteScrollTemplates from '../../components/InfiniteScrollTemplates';
-import { getCategoriesData } from '../../lib/categories';
+//import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
 import { getBrandData } from '../../lib/queries';
 import { Metadata } from 'next';
+
+// Force dynamic rendering to prevent build-time GraphQL calls
+export const dynamic = 'force-dynamic';
 
 const GET_EMAIL_TYPE_SEO_BY_SLUG = gql`
 query EmailTemplate($slug: [String]) {
@@ -33,7 +36,8 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
         id
         name
         slug
-        posts(first: 11) {
+        description
+        posts(first: 75) {
           nodes {
             title
             slug
@@ -71,10 +75,17 @@ const GET_EMAIL_TYPE_BY_SLUG = gql`
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const resolvedParams = await params;
+  let decodedSlug: string;
+  try {
+    decodedSlug = decodeURIComponent(resolvedParams.slug as string);
+  } catch {
+    decodedSlug = resolvedParams.slug as string;
+  }
+
   const { data } = await client.query({
     query: GET_EMAIL_TYPE_SEO_BY_SLUG,
     variables: {
-      slug: [resolvedParams.slug],
+      slug: [decodedSlug],
     },
   });
 
@@ -91,17 +102,28 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
+export const revalidate = 10;   
+
 export default async function EmailTypePage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
+  let decodedSlug: string;
+  try {
+    decodedSlug = decodeURIComponent(resolvedParams.slug as string);
+  } catch {
+    decodedSlug = resolvedParams.slug as string;
+  }
+
   const { data } = await client.query({
     query: GET_EMAIL_TYPE_BY_SLUG,
+    fetchPolicy: 'no-cache',
     variables: {
-      slug: [resolvedParams.slug], // pass slug as array
+      slug: [decodedSlug], // pass slug as array
     },
+   
   });
 
   const emailTypeNode = data.emailTypes?.nodes?.[0];
-  const categoriesData = await getCategoriesData();
+  //const categoriesData = await getCategoriesData();
 
   // If no data is found, show message
   if (!emailTypeNode) {
@@ -117,11 +139,11 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
   const { adBoxes } = await getBrandData();
 
   return (
-    <>
+    <div className="page-email-type">
       <div className="container">
         <div className="text-center py-10 md:py-20 max-w-6xl w-full m-auto">
-          <h1 className="leading-tight tracking-tight pb-6 pt-4 md:py-5 block">{categoriesData?.topHeading}</h1>
-          <p className="p2 w-full m-auto pt-2 text-theme-text-2">{categoriesData?.topText}</p>
+          <h1 className="leading-tight tracking-tight pb-6 pt-4 md:py-5 block">{emailTypeNode?.name} Email Inspiration</h1>
+          <p className="p2 w-full m-auto pt-2 text-theme-text-2">{emailTypeNode?.description}</p>
         </div>
       </div>
 
@@ -131,6 +153,7 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
           hasNextPage={emailTypeNode?.posts?.pageInfo.hasNextPage}
           endCursor={emailTypeNode?.posts?.pageInfo.endCursor}
           adBoxes={adBoxes}
+          activeTagSlug={decodedSlug}
         />
       </div>
 
@@ -151,6 +174,6 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
           target: ''
         }
       }} />
-    </>
+    </div>
   );
 }

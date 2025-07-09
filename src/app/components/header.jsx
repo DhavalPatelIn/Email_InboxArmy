@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import HeaderSearch from './HeaderSearch';
 import { postdata } from '../lib/queries';
+import { Suspense } from 'react';
 
 // components/Header.tsx
 import HeaderClientWrapper from './HeaderClientWrapper';
@@ -79,7 +80,7 @@ export default async function Header() {
                                                             <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
                                                         </span>
                                                     </li>
-                                                    {emailTypes.map((item) => (
+                                                    {emailTypes.filter(item => item.count > 0).map((item) => (
                                                         <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
                                                             <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/email-type/${item.slug}`}>
                                                                 {item.name}
@@ -95,7 +96,7 @@ export default async function Header() {
                                                             <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
                                                         </span>
                                                     </li>
-                                                    {industries.map((item) => (
+                                                    {industries.filter(item => item.count > 0).map((item) => (
                                                         <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
                                                             <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/industry/${item.slug}`}>
                                                                 {item.name}
@@ -104,22 +105,24 @@ export default async function Header() {
                                                     ))}
                                                 </ul>
 
-                                                <ul className="flex flex-wrap content-start xl:w-4/12">
-                                                    <input type="checkbox" id="option2" className="category-child top-0 left-28 right-0 m-auto w-8 h-9 z-30 cursor-pointer block xl:hidden opacity-0" />
-                                                    <li className="w-full py-3 2xl:mb-4 px-3 md:px-5 xl:px-2 2xl:px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Seasonal
-                                                        <span className='submenu-arrow absolute top-0 right-4 w-8 h-full flex items-center justify-center xl:hidden'>
-                                                            <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
-                                                        </span>
-                                                    </li>
-
-                                                    {seasonals.map((item) => (
-                                                        <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
-                                                            <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/seasonal/${item.slug}`}>
-                                                                {item.name}
-                                                            </Link>
+                                                {seasonals.length > 0 && (
+                                                    <ul className="flex flex-wrap content-start xl:w-4/12">
+                                                        <input type="checkbox" id="option2" className="category-child top-0 left-28 right-0 m-auto w-8 h-9 z-30 cursor-pointer block xl:hidden opacity-0" />
+                                                        <li className="w-full py-3 2xl:mb-4 px-3 md:px-5 xl:px-2 2xl:px-5 uppercase text-left bg-theme-light-gray-3 xl:bg-transparent relative rounded-lg">Seasonal
+                                                            <span className='submenu-arrow absolute top-0 right-4 w-8 h-full flex items-center justify-center xl:hidden'>
+                                                                <Image className='w-5' src={DownArrow} width={30} header={30} alt="Icon" />
+                                                            </span>
                                                         </li>
-                                                    ))}
-                                                </ul>
+
+                                                        {seasonals.filter(item => item.count > 0).map((item) => (
+                                                            <li key={item.slug} className="w-6/12 child-2 inline-block text-left">
+                                                                <Link className="text-sm md:text-base inline-block px-3 md:px-5 xl:px-2 2xl:px-5 py-1 2xl:py-2 hover:bg-theme-light-gray-3 rounded-lg text-theme-dark" href={`/seasonal/${item.slug}`}>
+                                                                    {item.name}
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
                                             </div>
                                         </li>
 
@@ -150,7 +153,9 @@ export default async function Header() {
                                 </svg>
                             </span>
                             <div className='header-search hidden xl:flex flex-wrap items-center'>
-                                <HeaderSearch />
+                                <Suspense fallback={null}>
+                                    <HeaderSearch />
+                                </Suspense>
                             </div>
                             {/* <button className="font-semibold px-5 py-4 text-theme-dark hover:bg-theme-dark hover:text-white whitespace-nowrap  rounded-lg bg-transparent border-none">Sign up</button>
                             <button className="bg-theme-blue text-white hover:bg-theme-dark font-semibold px-5 py-4 rounded-lg whitespace-nowrap border-none">Log in</button> */}

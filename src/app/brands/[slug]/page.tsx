@@ -25,7 +25,6 @@ const GET_BRAND_AND_POSTS_QUERY = gql`
       title
       slug
       brands {
-        brandIntroduction
         website
       }
       featuredImage {
@@ -62,7 +61,7 @@ const GET_BRAND_AND_POSTS_QUERY = gql`
             slug
           }
         }
-        brandposts {
+        postdata {
           brand {
             nodes {
               slug
@@ -119,16 +118,21 @@ export default async function BrandDetail({ params }: { params: Promise<Params> 
       variables: {
         slug: decodedSlug,
       },
+      context: {
+        fetchOptions: {
+          next: { revalidate: 10 }
+        }
+      }
     });
 
     const brandInfo = data.brand;
     const allPosts = data.posts?.nodes || [];
 
-    // Filter posts that belong to this brand using the brandposts field
+    // Filter posts that belong to this brand using the postdata.brand field
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const brandPosts = allPosts.filter((post: any) =>
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      post.brandposts?.brand?.nodes?.some((brand: any) => brand.slug === decodedSlug)
+      post.postdata?.brand?.nodes?.some((brand: any) => brand.slug === decodedSlug)
     );
 
     // Get ad boxes data
@@ -153,17 +157,29 @@ export default async function BrandDetail({ params }: { params: Promise<Params> 
               <div className="flex flex-wrap md:flex-nowrap items-center gap-8 md:gap-6 w-full md:w-8/12">
                 <div className='w-full md:w-auto 2xl:pl-1'>
                   <div className="bg-white m-auto md:m-0 w-[150px] md:w-28 lg:w-[150px] h-[150px] md:h-28 lg:h-[150px] rounded-full overflow-hidden flex items-center justify-center">
-                    <Image className='w-full h-full object-cover' src={brandInfo.featuredImage.node.sourceUrl} alt={brandInfo.title} width={150} height={150} />
+                    {brandInfo.featuredImage?.node?.sourceUrl ? (
+                      <Image
+                        className='w-full h-full object-cover'
+                        src={brandInfo.featuredImage.node.sourceUrl}
+                        alt={brandInfo.title}
+                        width={150}
+                        height={150}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-500 text-sm">No Image</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div className='w-full md:w-auto md:pl-2'>
                   <h1>{brandInfo.title}</h1>
-                  {brandInfo.brands.brandIntroduction && (
-                    <p className="text-base lg:text-1xl text-theme-text-2 mt-4 ">
-                      {brandInfo.brands.brandIntroduction}
-                    </p>
-                  )}
+
+                  <p className="text-base lg:text-1xl text-theme-text-2 mt-4 ">
+                    A collection of emails built by {brandInfo.title}
+                  </p>
+
                 </div>
               </div>
               <div className='w-full md:w-4/12 flex justify-center md:justify-end mt-8 md:mt-0'>

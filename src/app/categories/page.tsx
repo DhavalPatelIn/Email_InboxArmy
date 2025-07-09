@@ -54,7 +54,7 @@ interface EmailTemplateData {
 
 const EMAIL_TEMPLATES_QUERY = gql`
     query EmailTemplate($after: String) {
-    posts(first: 11, after: $after) {
+    posts(first: 75, after: $after) {
       nodes {
         title
         slug
@@ -95,12 +95,14 @@ const EMAIL_TEMPLATES_QUERY = gql`
   }
 `;
 
+export const revalidate = 10;
 export default async function Categories() {
 
 
   try {
     const { data } = await client.query<EmailTemplateData>({
       query: EMAIL_TEMPLATES_QUERY,
+      fetchPolicy: 'no-cache',
     });
 
     const categoriesData = await getCategoriesData();
