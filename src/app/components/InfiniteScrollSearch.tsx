@@ -144,9 +144,9 @@ export default function InfiniteScrollSearch({
                                         {seasonal.name}
                                     </span>
                                 ))}
-                                {hasAnyTaxonomy && (
+                                {!hasAnyTaxonomy && (
                                     <span className="text-xxs md:text-sm block leading-4 bg-theme-light-gray text-theme-dark px-2 md:px-4 py-1 md:py-2 rounded-md font-normal">Other</span>
-                                )}                               
+                                )}
                             </div>
                         </div>
                     </Link>

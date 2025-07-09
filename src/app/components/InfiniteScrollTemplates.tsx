@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import EmailCard from "./EmailCard";
 import { useInView } from 'react-intersection-observer';
 import Image from "next/image";
@@ -96,15 +96,31 @@ export default function InfiniteScrollTemplates({
     const [hasNextPage, setHasNextPage] = useState(initialHasNextPage);
     const [endCursor, setEndCursor] = useState(initialEndCursor);
     const [isLoading, setIsLoading] = useState(false);
+    const [lastLoadedBatch, setLastLoadedBatch] = useState(0);
+    const loadingRef = useRef(false);
 
     const { ref, inView } = useInView({
         threshold: 0,
         rootMargin: '100px',
     });
 
-    const loadMoreTemplates = useCallback(async () => {
-        if (inView) {
+    // Single effect to handle infinite scroll
+    useEffect(() => {
+        const loadMoreTemplates = async () => {
+            // Don't load if already loading, no next page, or not in view
+            if (loadingRef.current || !inView) return;
+
+            // Calculate the exact threshold for the next batch
+            const currentBatchSize = 75;
+            const nextBatchThreshold = (lastLoadedBatch + 1) * currentBatchSize;
+
+            // Only load if we have exactly reached the threshold
+            if (templates.length !== nextBatchThreshold) return;
+
+            // Set loading state
+            loadingRef.current = true;
             setIsLoading(true);
+
             try {
                 const response = await fetch('/api/templates', {
                     method: 'POST',
@@ -116,35 +132,32 @@ export default function InfiniteScrollTemplates({
                     }),
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
                 const data = await response.json();
 
-                if (data.posts) {
+                if (data.posts && data.posts.nodes.length > 0) {
                     setTemplates(prev => [...prev, ...data.posts.nodes]);
                     setHasNextPage(data.posts.pageInfo.hasNextPage);
                     setEndCursor(data.posts.pageInfo.endCursor);
+                    setLastLoadedBatch(lastLoadedBatch + 1);
                 }
             } catch (error) {
                 console.error('Error loading more templates:', error);
             } finally {
+                loadingRef.current = false;
                 setIsLoading(false);
             }
-        }
-    }, [inView]);
-
-    useEffect(() => {
+        };
         loadMoreTemplates();
-    }, [loadMoreTemplates]);
+    }, [inView, endCursor, templates.length, lastLoadedBatch]);
 
     // Function to render items with ads at specific positions: 6, 12, 24, 36, 48, etc.
     const renderItemsWithAds = () => {
         const items = [];
 
         for (let i = 0; i < templates.length; i++) {
-            // Add the email template
+            // Template card
             items.push(
                 <EmailCard
                     key={`template-${templates[i].title}-${i}`}
@@ -160,33 +173,25 @@ export default function InfiniteScrollTemplates({
                 />
             );
 
-            // Add ad at specific positions: 5, 12, then every 12 after that (24, 36, 48, etc.)
             const position = i + 1;
             const shouldShowAd = position === 5 || (position >= 12 && position % 12 === 0);
 
             if (shouldShowAd && adBoxes && adBoxes.length > 0) {
-                // Calculate which ad to show
                 let adIndex;
                 if (position === 5) {
-                    adIndex = 0; // First ad at position 5
+                    adIndex = 0;
                 } else if (position === 12) {
-                    adIndex = 1; // Second ad at position 12
+                    adIndex = 1;
                 } else {
-                    // For positions 24, 36, 48, etc., cycle through ads starting from the beginning
                     adIndex = Math.floor((position / 12) - 2) % adBoxes.length;
                 }
 
-                // Ensure adIndex is valid and within bounds
                 adIndex = Math.max(0, adIndex % adBoxes.length);
                 const adBox = adBoxes[adIndex];
 
-                // Only render ad if adBox exists and has required properties
                 if (adBox && adBox.cta && adBox.title) {
                     items.push(
-                        <AdCard
-                            key={`ad-${position}-${adIndex}`}
-                            adBox={adBox}
-                        />
+                        <AdCard key={`ad-${items.length}`} adBox={adBox} />
                     );
                 }
             }
@@ -200,7 +205,12 @@ export default function InfiniteScrollTemplates({
             {renderItemsWithAds()}
             {hasNextPage && (
                 <div ref={ref} className="col-span-full h-10 flex items-center justify-center">
-                    {isLoading && <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>}
+                    {isLoading && (
+                        <div className="flex flex-col items-center">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-2"></div>
+                            <p className="text-sm text-gray-600">Loading batch {lastLoadedBatch + 2}...</p>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

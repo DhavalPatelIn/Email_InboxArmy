@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 
 interface HtmlToImageConverterProps {
     htmlContent: string;
@@ -13,7 +12,7 @@ export default function HtmlToImageConverter({ htmlContent }: HtmlToImageConvert
     const [error, setError] = useState<string | null>(null);
     const shadowContainerRef = useRef<HTMLDivElement>(null);
 
-    const convertToImage = useCallback(async () => {
+    const convertToImage = async () => {
         if (!htmlContent) return;
 
         setIsLoading(true);
@@ -40,12 +39,12 @@ export default function HtmlToImageConverter({ htmlContent }: HtmlToImageConvert
         } finally {
             setIsLoading(false);
         }
-    }, [htmlContent]);
+    };
 
     useEffect(() => {
         // Convert to image when component mounts
         convertToImage();
-    }, [htmlContent, convertToImage]);
+    }, [htmlContent]);
 
     useEffect(() => {
         if (shadowContainerRef.current) {
@@ -88,11 +87,9 @@ export default function HtmlToImageConverter({ htmlContent }: HtmlToImageConvert
                     </div>
 
                     <div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm image-generated">
-                        <Image
+                        <img
                             src={imageData}
                             alt="Email preview as image"
-                            width={800}
-                            height={600}
                             className="w-full h-auto max-w-full"
                             style={{ display: 'block' }}
                         />

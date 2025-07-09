@@ -102,7 +102,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
-export const revalidate = 10;   
+export const revalidate = 10;
 
 export default async function EmailTypePage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
@@ -119,7 +119,7 @@ export default async function EmailTypePage({ params }: { params: Promise<Params
     variables: {
       slug: [decodedSlug], // pass slug as array
     },
-   
+
   });
 
   const emailTypeNode = data.emailTypes?.nodes?.[0];
