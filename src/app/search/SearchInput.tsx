@@ -7,9 +7,10 @@ import SearchIcon from '../images/search-icon.svg';
 
 interface SearchInputProps {
     searchKeyword: string;
+    onSearch?: (keyword: string) => void;
 }
 
-export default function SearchInput({ searchKeyword }: SearchInputProps) {
+export default function SearchInput({ searchKeyword, onSearch }: SearchInputProps) {
     const [searchTerm, setSearchTerm] = useState(searchKeyword);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -49,7 +50,7 @@ export default function SearchInput({ searchKeyword }: SearchInputProps) {
                     required
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    placeholder="Search brands or keywords"
+                    placeholder="Search keywords"
                     className="bg-transparent w-full outline-none text-gray-700 placeholder-gray-500"
                     disabled={isLoading}
                 />

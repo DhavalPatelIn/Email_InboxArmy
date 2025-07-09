@@ -55,7 +55,7 @@ interface EmailTemplateData {
 
 const GET_HOME_PAGE_DATA = gql`
 query HomePage {
-    page(id: "home", idType: URI) {
+  page(id: "home", idType: URI) {
     seo {
       title
       metaDesc
@@ -71,16 +71,17 @@ query HomePage {
 
 const EMAIL_TEMPLATES_QUERY = gql`
   query EmailTemplate($after: String) {
-    posts(first: 75, after: $after) {     
+    posts(first: 75, after: $after) {
       nodes {
         title
         slug
         uri
+        content
         featuredImage {
           node {
             sourceUrl
           }
-        }      
+        }
         emailTypes(first: 1) {
           nodes {
             id
@@ -108,11 +109,11 @@ const EMAIL_TEMPLATES_QUERY = gql`
         endCursor
       }
     }
-     
   }
 `;
 
 export const revalidate = 10;
+
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const { data } = await client.query({
@@ -133,7 +134,6 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch (error) {
     console.error('Error generating metadata:', error);
-    // Return fallback metadata if GraphQL fails
     return {
       title: 'InboxArmy - Email Marketing Templates',
       description: 'Discover professional email marketing templates for your business. Browse our collection of industry-specific email templates.',
@@ -153,25 +153,31 @@ export default async function Home() {
 
     const { adBoxes } = await getBrandData();
 
+    const PAGE_SIZE = 75;
+
+    // Only pass the first 75 templates
+    const initialTemplates = data.posts.nodes.slice(0, PAGE_SIZE);
+
+    // Check if there are more templates beyond the first 75
+    const remainingTemplates = data.posts.nodes.slice(PAGE_SIZE);
+
     return (
       <>
         <HeroSection />
 
         <div className="pt-4 pb-6 px-4 xl:px-12 md:pt-5">
           <InfiniteScrollTemplates
-            initialTemplates={data.posts.nodes}
+            initialTemplates={initialTemplates}
             hasNextPage={data.posts.pageInfo.hasNextPage}
-            endCursor={data.posts.pageInfo.endCursor}
+            endCursor={data.posts.pageInfo.endCursor || "0"}
             adBoxes={adBoxes}
           />
         </div>
       </>
     );
-
   } catch (error) {
     console.error('Error fetching home page data:', error);
     return (
-
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Welcome to InboxArmy</h1>
@@ -186,7 +192,6 @@ export default async function Home() {
           </div>
         </div>
       </div>
-
     );
   }
 }

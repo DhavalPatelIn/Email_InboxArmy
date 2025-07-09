@@ -27,38 +27,17 @@ const httpLink = new HttpLink({
         if (process.env.NODE_ENV === 'production' && typeof window === 'undefined') {
             // During build time, return a mock response to prevent build failures
             return Promise.resolve(new Response(JSON.stringify({
-                data: {
-                    posts: {
-                        nodes: [],
-                        pageInfo: {
-                            hasNextPage: false,
-                            endCursor: null
-                        }
-                    },
-                    page: {
-                        seo: {
-                            title: 'InboxArmy - Email Marketing Templates',
-                            metaDesc: 'Discover professional email marketing templates for your business.',
-                            opengraphTitle: 'InboxArmy - Email Marketing Templates',
-                            opengraphDescription: 'Discover professional email marketing templates for your business.'
-                        }
-                    },
-                    themeoptions: {
-                        globaldata: {
-                            adBoxes: []
-                        }
-                    }
-                },
-                errors: null
+                data: null,
+                errors: [{ message: 'GraphQL endpoint not available during build' }]
             }), {
-                status: 200,
+                status: 503,
                 headers: { 'Content-Type': 'application/json' }
             }));
         }
 
         // Add timeout to prevent hanging requests during build
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 50000); // 50 second timeout
 
         return fetch(uri, {
             ...options,

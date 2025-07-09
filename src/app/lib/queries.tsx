@@ -370,3 +370,40 @@ export async function getBrandsData(after: string | null = null) {
     };
   }
 }
+
+// // Alternative brands query with different ordering approaches
+// export const GET_BRANDS_ORDERED_QUERY = gql`
+//   query GetBrandsOrdered($after: String) {
+//     brands(first: 30, after: $after, where: { orderby: { field: TITLE, order: ASC } }) {
+//       nodes {
+//         seo {
+//           title
+//           metaDesc
+//           opengraphTitle
+//           opengraphDescription
+//           opengraphImage {
+//             sourceUrl
+//           }
+//         }
+//         featuredImage {
+//           node {
+//             sourceUrl
+//             altText
+//           }
+//         }
+//         slug
+//         title
+//         brandCategories(first: 50) {
+//           nodes {
+//             name
+//             slug
+//           }
+//         }
+//       }
+//       pageInfo {
+//         hasNextPage
+//         endCursor
+//       }
+//     }
+//   }
+// `;
