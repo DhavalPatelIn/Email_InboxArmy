@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import './styles/globals.css';
+import { Suspense } from 'react';
 
 // Components
 import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
 import GlobalLoader from './components/GlobalLoader';
-import Script from 'next/script';
 import { client } from './lib/apollo-client';
 import { gql } from '@apollo/client';
 import BodyClassHandler from './components/BodyClassHandler';
@@ -13,6 +13,8 @@ import BodyClassHandler from './components/BodyClassHandler';
 const GET_HOME_PAGE_DATA = gql`
 query HomePage {
     page(id: "home", idType: URI) {
+    id
+    slug
     seo {
       title
       metaDesc
@@ -37,6 +39,10 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: seo?.title || 'InboxArmy - Email Marketing Templates',
       description: seo?.metaDesc || 'Discover professional email marketing templates for your business. Browse our collection of industry-specific email templates.',
+      robots: {
+        index: false,
+        follow: false,
+      },
       openGraph: {
         title: seo?.opengraphTitle || seo?.title || 'InboxArmy - Email Marketing Templates',
         description: seo?.opengraphDescription || seo?.metaDesc || 'Discover professional email marketing templates for your business.',
@@ -49,6 +55,10 @@ export async function generateMetadata(): Promise<Metadata> {
     return {
       title: 'InboxArmy - Email Marketing Templates',
       description: 'Discover professional email marketing templates for your business. Browse our collection of industry-specific email templates.',
+      robots: {
+        index: false,
+        follow: false,
+      },
       openGraph: {
         title: 'InboxArmy - Email Marketing Templates',
         description: 'Discover professional email marketing templates for your business.',
@@ -64,18 +74,15 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
+
       <body>
         <BodyClassHandler />
-        <GlobalLoader />
+        <Suspense fallback={null}>
+          <GlobalLoader />
+        </Suspense>
         <Header />
         {children}
         <Footer />
-        {/* BugHerd Script */}
-        <Script
-          src="https://www.bugherd.com/sidebarv2.js?apikey=vfmlojxzuzzx1k3puoexfq "
-          strategy="afterInteractive"
-          async
-        />
       </body>
     </html>
   );

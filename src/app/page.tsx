@@ -71,8 +71,7 @@ query HomePage {
 
 const EMAIL_TEMPLATES_QUERY = gql`
   query EmailTemplate($after: String) {
-    posts(first: 11, after: $after) {
-     
+    posts(first: 75, after: $after) {     
       nodes {
         title
         slug
@@ -113,10 +112,12 @@ const EMAIL_TEMPLATES_QUERY = gql`
   }
 `;
 
+export const revalidate = 10;
 export async function generateMetadata(): Promise<Metadata> {
   try {
     const { data } = await client.query({
       query: GET_HOME_PAGE_DATA,
+      fetchPolicy: 'no-cache',
     });
 
     const seo = data?.page?.seo;
@@ -166,9 +167,11 @@ export default async function Home() {
         </div>
       </>
     );
+
   } catch (error) {
     console.error('Error fetching home page data:', error);
     return (
+
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Welcome to InboxArmy</h1>
@@ -183,6 +186,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
+
     );
   }
 }

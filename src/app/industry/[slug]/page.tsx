@@ -1,7 +1,7 @@
 import { client } from '../../lib/apollo-client';
 import { gql } from '@apollo/client'
 import InfiniteScrollTemplates from '../../components/InfiniteScrollTemplates';
-import { getCategoriesData } from '../../lib/categories';
+//import { getCategoriesData } from '../../lib/categories';
 import MarketingAgency from "app/components/MarketingAgency";
 import { Params } from 'next/dist/server/request/params';
 import { getBrandData } from 'app/lib/queries';
@@ -33,7 +33,8 @@ const GET_INDUSTRY_WITH_POSTS = gql`
         id
         name
         slug
-        posts(first: 11) {
+        description
+        posts(first: 75) {
           nodes {
             title
             slug
@@ -99,6 +100,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
+export const revalidate = 10;   
+
 export default async function IndustryPage({ params }: { params: Promise<Params> }) {
   const resolvedParams = await params;
   let decodedSlug: string;
@@ -110,14 +113,16 @@ export default async function IndustryPage({ params }: { params: Promise<Params>
 
   const { data } = await client.query({
     query: GET_INDUSTRY_WITH_POSTS,
+    fetchPolicy: 'no-cache',
     variables: {
       slug: [decodedSlug], // pass slug as array
     },
+   
   });
 
   const industryNode = data.industries?.nodes?.[0];
 
-  const categoriesData = await getCategoriesData();
+  //const categoriesData = await getCategoriesData();
   const { adBoxes } = await getBrandData();
   // If no data is found, show message
   if (!industryNode) {
@@ -131,12 +136,11 @@ export default async function IndustryPage({ params }: { params: Promise<Params>
   }
 
   return (
-    <>
-
+    <div className="page-industry">
       <div className="container">
         <div className="text-center py-10 md:py-20 max-w-6xl w-full m-auto">
-          <h1 className="leading-tight tracking-tight pb-6 pt-4 md:py-5 block">{categoriesData?.topHeading}</h1>
-          <p className="p2 w-full m-auto pt-2 text-theme-text-2">{categoriesData?.topText}</p>
+          <h1 className="leading-tight tracking-tight pb-6 pt-4 md:py-5 block">{industryNode?.name} Email Inspiration</h1>
+          <p className="p2 w-full m-auto pt-2 text-theme-text-2">{industryNode?.description}</p>
         </div>
       </div>
 
@@ -146,6 +150,7 @@ export default async function IndustryPage({ params }: { params: Promise<Params>
           hasNextPage={industryNode?.posts?.pageInfo.hasNextPage}
           endCursor={industryNode?.posts?.pageInfo.endCursor}
           adBoxes={adBoxes}
+          activeTagSlug={decodedSlug}
         />
       </div>
 
@@ -167,6 +172,6 @@ export default async function IndustryPage({ params }: { params: Promise<Params>
           target: ''
         }
       }} />
-    </>
+    </div>
   );
 }
